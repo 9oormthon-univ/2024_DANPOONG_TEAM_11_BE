@@ -42,3 +42,4 @@ src/**/application-prod.yml
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+../.DS_Store
