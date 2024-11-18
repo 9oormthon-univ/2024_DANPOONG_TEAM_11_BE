@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  spot:
+    image: wonjun0120/nongdam:latest
+    env_file:
+      - .env.dev
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - MYSQL_DATABASE=nongdam
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
