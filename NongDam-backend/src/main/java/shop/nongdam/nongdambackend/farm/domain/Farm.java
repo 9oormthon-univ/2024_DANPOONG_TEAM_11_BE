@@ -1,20 +1,18 @@
 package shop.nongdam.nongdambackend.farm.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
 import shop.nongdam.nongdambackend.member.domain.Member;
+import shop.nongdam.nongdambackend.region.domain.Region;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Farm extends BaseEntity  {
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "farm_user_id", nullable = false)
-    private Member member;
 
     @Column(name = "farm_name", nullable = false)
     private String farmName;
@@ -22,32 +20,35 @@ public class Farm extends BaseEntity  {
     @Column(name = "profile_image")
     private String profileImage;
 
-    @Column(name = "farm_representative")
+    @Column(name = "farm_representative", nullable = false)
     private String farmRepresentative;
 
-    @Column(name = "phone_number", length = 50)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "business_registration_number")
+    @Column(name = "business_registration_number", nullable = false)
     private Long businessRegistrationNumber;
 
-    @Column(name = "address")
+    @Column(nullable = false)
     private String address;
 
-//    @Column(name = "region_id")
-//    private Long regionId;
-
-    @Column(name = "latitude")
     private Double latitude;
 
-    @Column(name = "longitude")
     private Double longitude;
+
+    @OneToOne
+    @JoinColumn(name = "farm_user_id", nullable = false)
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     @Builder
     public Farm(Member member, String farmName, String profileImage,
                 String farmRepresentative, String phoneNumber,
                 Long businessRegistrationNumber, String address,
-                Double latitude, Double longitude) {
+                Region region, Double latitude, Double longitude) {
         this.member = member;
         this.farmName = farmName;
         this.profileImage = profileImage;
@@ -55,6 +56,7 @@ public class Farm extends BaseEntity  {
         this.phoneNumber = phoneNumber;
         this.businessRegistrationNumber = businessRegistrationNumber;
         this.address = address;
+        this.region = region;
         this.latitude = latitude;
         this.longitude = longitude;
     }
