@@ -1,12 +1,18 @@
 package shop.nongdam.nongdambackend.member.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
+import shop.nongdam.nongdambackend.restaurant.domain.Restaurant;
 
 @Entity
 @Getter
@@ -28,6 +34,9 @@ public class Member extends BaseEntity {
     private boolean firstLogin;
 
     private String certificate;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Restaurant> restaurant;
 
     @Builder
     public Member(String email, String name, String picture, SocialType socialType, Role role, boolean firstLogin,
