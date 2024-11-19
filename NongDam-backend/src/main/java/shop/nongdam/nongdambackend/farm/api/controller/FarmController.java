@@ -26,12 +26,14 @@ public class FarmController implements FarmDocs{
         return ApiResponseTemplate.created("농산물 생산자 등록 성공", farmInfoResponseDTO);
     }
 
+    @Override
     @GetMapping("{farmId}")
     public ApiResponseTemplate<FarmInfoResponseDTO> findById(@PathVariable Long farmId){
         FarmInfoResponseDTO farmInfoResponseDTO = farmService.findById(farmId);
         return ApiResponseTemplate.ok("농산물 생산자 상세 조회 성공", farmInfoResponseDTO);
     }
 
+    @Override
     @GetMapping
     public ApiResponseTemplate<FarmInfoResponseDTOs> findAll(
             @RequestParam(defaultValue = "0", name = "page") int page,
