@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
 import shop.nongdam.nongdambackend.member.domain.Member;
+import shop.nongdam.nongdambackend.region.domain.Region;
 
 @Entity
 @Getter
@@ -55,10 +56,14 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menu;
 
+    @JoinColumn(name = "region_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Region region;
+
     @Builder
     public Restaurant(String restaurantName, String restaurantRepresentative, Member member, String phoneNumber,
                       String businessRegistrationNumber, String address, double latitude, double longitude,
-                      String representImage, Long openTime, Long closeTime, List<Menu> menu) {
+                      String representImage, Long openTime, Long closeTime, List<Menu> menu, Region region) {
         this.restaurantName = restaurantName;
         this.restaurantRepresentative = restaurantRepresentative;
         this.member = member;
@@ -71,5 +76,6 @@ public class Restaurant extends BaseEntity {
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.menu = menu;
+        this.region = region;
     }
 }
