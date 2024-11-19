@@ -120,7 +120,7 @@ jobs:
         EC2_USER: ${{ secrets.EC2_USERNAME }}
         ENV_DEV: ${{ secrets.ENV_DEV }}
       run: |
-        echo "$EC2_SSH_KEY" > .env.dev
+        echo "$ENV_DEV" > .env.dev
         scp -o StrictHostKeyChecking=no -i ec2_key.pem docker-compose.yml ${EC2_USER}@${EC2_HOST}:~/
         scp -o StrictHostKeyChecking=no -i ec2_key.pem docker-compose.override.yml ${EC2_USER}@${EC2_HOST}:~/
         scp -o StrictHostKeyChecking=no -i ec2_key.pem .env.dev ${EC2_USER}@${EC2_HOST}:~/
