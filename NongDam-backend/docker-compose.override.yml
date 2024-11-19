@@ -9,8 +9,9 @@ services:
 
   db:
     image: mysql:8.0
+    env_file:
+      - .env.dev
     environment:
-      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - MYSQL_DATABASE=nongdam
     ports:
       - "3306:3306"
