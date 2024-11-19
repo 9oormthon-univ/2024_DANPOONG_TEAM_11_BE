@@ -3,13 +3,13 @@ package shop.nongdam.nongdambackend.farm.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.nongdam.nongdambackend.auth.application.AuthMemberService;
 import shop.nongdam.nongdambackend.auth.exception.EmailNotFoundException;
-import shop.nongdam.nongdambackend.farm.api.dto.request.FarmRequestDTO;
-import shop.nongdam.nongdambackend.farm.api.dto.response.FarmRegistrationResponseDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.request.FarmSaveRequestDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.farm.domain.repository.FarmRepository;
 import shop.nongdam.nongdambackend.member.domain.Member;
+import shop.nongdam.nongdambackend.member.domain.Role;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
 
 @Service
@@ -18,32 +18,31 @@ import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
 public class FarmService {
     private final FarmRepository farmRepository;
     private final MemberRepository memberRepository;
-    private final AuthMemberService authMemberService;
 
     @Transactional
-    public FarmRegistrationResponseDTO saveFarmInfo(String email, FarmRequestDTO farmRequestDTO){
+    public FarmInfoResponseDTO saveFarmInfo(String email, FarmSaveRequestDTO farmSaveRequestDTO){
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(EmailNotFoundException::new);
-        Farm farm = createFarm(member, farmRequestDTO);
-        return FarmRegistrationResponseDTO.from(farm);
+
+        Farm farm = buildNewFarm(member, farmSaveRequestDTO);
+        farmRepository.save(farm);
+
+        member.updateRole(Role.ROLE_PRODUCER);
+        return FarmInfoResponseDTO.from(farm);
     }
 
 
-    private Farm createFarm(Member member, FarmRequestDTO farmRequestDTO){
-        return farmRepository.save(buildNewFarm(member, farmRequestDTO));
-    }
-
-    private Farm buildNewFarm(Member member, FarmRequestDTO farmRequestDTO){
+    private Farm buildNewFarm(Member member, FarmSaveRequestDTO farmSaveRequestDTO){
         return Farm.builder()
                 .member(member)
-                .farmName(farmRequestDTO.farmName())
-                .profileImage(farmRequestDTO.profileImage())
-                .farmRepresentative(farmRequestDTO.farmRepresentative())
-                .phoneNumber(farmRequestDTO.phoneNumber())
-                .businessRegistrationNumber(farmRequestDTO.businessRegistrationNumber())
-                .address(farmRequestDTO.address())
-                .latitude(farmRequestDTO.latitude())
-                .longitude(farmRequestDTO.longitude())
+                .farmName(farmSaveRequestDTO.farmName())
+                .profileImage(farmSaveRequestDTO.profileImage())
+                .farmRepresentative(farmSaveRequestDTO.farmRepresentative())
+                .phoneNumber(farmSaveRequestDTO.phoneNumber())
+                .businessRegistrationNumber(farmSaveRequestDTO.businessRegistrationNumber())
+                .address(farmSaveRequestDTO.address())
+                .latitude(farmSaveRequestDTO.latitude())
+                .longitude(farmSaveRequestDTO.longitude())
                 .build();
     }
 }

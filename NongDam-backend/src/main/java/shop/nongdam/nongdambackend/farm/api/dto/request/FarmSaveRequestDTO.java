@@ -1,6 +1,6 @@
 package shop.nongdam.nongdambackend.farm.api.dto.request;
 
-public record FarmRequestDTO(
+public record FarmSaveRequestDTO(
         String farmName,
         String profileImage,
         String farmRepresentative,

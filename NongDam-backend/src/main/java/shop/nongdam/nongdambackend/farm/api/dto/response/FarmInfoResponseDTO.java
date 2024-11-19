@@ -4,11 +4,11 @@ import lombok.Builder;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 
 @Builder
-public record FarmRegistrationResponseDTO (
+public record FarmInfoResponseDTO(
         Farm farm
 ){
-    public static FarmRegistrationResponseDTO from(Farm farm){
-        return FarmRegistrationResponseDTO.builder()
+    public static FarmInfoResponseDTO from(Farm farm){
+        return FarmInfoResponseDTO.builder()
                 .farm(farm)
                 .build();
 
