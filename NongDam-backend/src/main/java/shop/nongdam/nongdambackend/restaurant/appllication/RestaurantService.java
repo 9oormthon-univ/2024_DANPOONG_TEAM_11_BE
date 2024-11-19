@@ -7,11 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.nongdam.nongdambackend.global.dto.PageInfoResDto;
+import shop.nongdam.nongdambackend.member.domain.Member;
+import shop.nongdam.nongdambackend.member.domain.Role;
+import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
+import shop.nongdam.nongdambackend.member.exception.MemberNotFoundException;
 import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTOs;
 import shop.nongdam.nongdambackend.restaurant.domain.Restaurant;
-import shop.nongdam.nongdambackend.restaurant.domain.repository.menu.MenuRepository;
 import shop.nongdam.nongdambackend.restaurant.domain.repository.RestaurantRepository;
 import shop.nongdam.nongdambackend.restaurant.exception.RestaurantNotFoundException;
 
@@ -20,14 +23,21 @@ import shop.nongdam.nongdambackend.restaurant.exception.RestaurantNotFoundExcept
 @Transactional(readOnly = true)
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public RestaurantInfoResponseDTO save(RestaurantSaveRequestDTO restaurantSaveRequestDTO) {
+    public RestaurantInfoResponseDTO save(String memberEmail, RestaurantSaveRequestDTO restaurantSaveRequestDTO) {
+        Member member = memberRepository.findByEmail(memberEmail)
+                .orElseThrow(MemberNotFoundException::new);
+
         Restaurant restaurant = buildNewRestaurant(restaurantSaveRequestDTO);
         restaurantRepository.save(restaurant);
 
+        member.updateRole(Role.ROLE_RESTAURANT);
         return RestaurantInfoResponseDTO.from(restaurant);
     }
+
+
 
     public RestaurantInfoResponseDTO findById(Long restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
