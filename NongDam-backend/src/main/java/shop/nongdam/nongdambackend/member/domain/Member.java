@@ -49,4 +49,8 @@ public class Member extends BaseEntity {
         this.firstLogin = firstLogin;
         this.certificate = certificate;
     }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }
