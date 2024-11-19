@@ -2,8 +2,8 @@ package shop.nongdam.nongdambackend.farm.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import shop.nongdam.nongdambackend.farm.api.dto.request.FarmRequestDTO;
-import shop.nongdam.nongdambackend.farm.api.dto.response.FarmRegistrationResponseDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.request.FarmSaveRequestDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.application.FarmService;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
@@ -16,11 +16,11 @@ public class FarmController implements FarmDocs{
 
     @Override
     @PostMapping
-    public ApiResponseTemplate<FarmRegistrationResponseDTO> registrationFarm(
+    public ApiResponseTemplate<FarmInfoResponseDTO> save(
             @CurrentMemberEmail String email,
-            @RequestBody FarmRequestDTO farmRequestDTO
+            @RequestBody FarmSaveRequestDTO farmSaveRequestDTO
     ){
-        FarmRegistrationResponseDTO farmRegistrationResponseDTO = farmService.saveFarmInfo(email, farmRequestDTO);
-        return ApiResponseTemplate.created("농산물 생산자 등록", farmRegistrationResponseDTO);
+        FarmInfoResponseDTO farmInfoResponseDTO = farmService.saveFarmInfo(email, farmSaveRequestDTO);
+        return ApiResponseTemplate.created("농산물 생산자 등록 성공", farmInfoResponseDTO);
     }
 }
