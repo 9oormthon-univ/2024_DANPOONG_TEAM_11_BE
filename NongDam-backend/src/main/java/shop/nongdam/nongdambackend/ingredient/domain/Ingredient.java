@@ -58,24 +58,4 @@ public class Ingredient extends BaseEntity {
         this.ingredientPricePerWeights = ingredientPricePerWeights;
         this.ingredientProductTags = ingredientProductTags;
     }
-
-    public void addIngredientPricePerWeight(IngredientPricePerWeight pricePerWeight) {
-        this.ingredientPricePerWeights.add(pricePerWeight);
-        pricePerWeight.setIngredient(this);
-    }
-
-    public void removeIngredientPricePerWeight(IngredientPricePerWeight pricePerWeight) {
-        this.ingredientPricePerWeights.remove(pricePerWeight);
-        pricePerWeight.setIngredient(null);
-    }
-
-    public void addIngredientProductTag(IngredientProductTag productTag) {
-        this.ingredientProductTags.add(productTag);
-        productTag.setIngredient(this);
-    }
-
-    public void removeIngredientProductTag(IngredientProductTag productTag) {
-        this.ingredientProductTags.remove(productTag);
-        productTag.setIngredient(null);
-    }
 }

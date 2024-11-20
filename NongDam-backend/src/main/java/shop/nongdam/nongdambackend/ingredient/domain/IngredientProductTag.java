@@ -1,10 +1,7 @@
 package shop.nongdam.nongdambackend.ingredient.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -22,6 +19,13 @@ public class IngredientProductTag {
     @MapsId("productTagId")
     @JoinColumn(name = "product_tag_id", nullable = false)
     private ProductTag productTag;
+
+    @Builder
+    public IngredientProductTag(Ingredient ingredient, ProductTag productTag) {
+        this.id = new IngredientProductTagId(ingredient.getId(), productTag.getId());
+        this.ingredient = ingredient;
+        this.productTag = productTag;
+    }
 
     public void setIngredient(Ingredient ingredient) {
         if (this.ingredient != null) {

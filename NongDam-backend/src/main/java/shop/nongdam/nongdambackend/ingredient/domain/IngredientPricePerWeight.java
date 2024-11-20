@@ -15,8 +15,7 @@ public class IngredientPricePerWeight {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ingredient_id")
-//    @JoinColumn(name = "ingredient_id", nullable = false)
+    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
     @Column(nullable = false)
@@ -25,20 +24,10 @@ public class IngredientPricePerWeight {
     @Column(nullable = false)
     private Long price;
 
-    public void setIngredient(Ingredient ingredient) {
-        if (this.ingredient != null) {
-            this.ingredient.getIngredientPricePerWeights().remove(this);
-        }
-        this.ingredient = ingredient;
-        if (ingredient != null && !ingredient.getIngredientPricePerWeights().contains(this)) {
-            ingredient.getIngredientPricePerWeights().add(this);
-        }
-    }
-
     @Builder
     public IngredientPricePerWeight(Long weight, Long price, Ingredient ingredient) {
         this.weight = weight;
         this.price = price;
-        this.setIngredient(ingredient);
+        this.ingredient = ingredient;
     }
 }

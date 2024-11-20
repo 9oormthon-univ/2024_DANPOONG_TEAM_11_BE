@@ -2,6 +2,7 @@ package shop.nongdam.nongdambackend.ingredient.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,8 @@ public class ProductTag {
     @OneToMany(mappedBy = "productTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientProductTag> ingredientProductTags;
 
+    @Builder
+    public ProductTag(String name) {
+        this.name = name;
+    }
 }

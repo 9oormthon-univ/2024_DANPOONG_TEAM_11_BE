@@ -8,19 +8,17 @@ import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.farm.domain.repository.FarmRepository;
 import shop.nongdam.nongdambackend.farm.exception.FarmAccessDeniedException;
 import shop.nongdam.nongdambackend.farm.exception.FarmNotFoundException;
-import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientPricePerWeightRequestDTOs;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
 import shop.nongdam.nongdambackend.ingredient.domain.*;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientCategoryRepository;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientRepository;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientUglyReasonRepository;
+import shop.nongdam.nongdambackend.ingredient.domain.repository.ProductTagRepository;
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientCategoryNotFoundException;
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientUglyReasonNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +29,7 @@ public class IngredientService {
     private final FarmRepository farmRepository;
     private final IngredientUglyReasonRepository ingredientUglyReasonRepository;
     private final IngredientCategoryRepository ingredientCategoryRepository;
+    private final ProductTagRepository productTagRepository;
 
     @Transactional
     public IngredientInfoResponseDTO saveIngredientInfo(
@@ -49,6 +48,25 @@ public class IngredientService {
         Ingredient ingredient = buildNewIngredient(farm, ingredientSaveRequestDto);
         ingredientRepository.save(ingredient);
 
+        ingredientSaveRequestDto.ingredientPricePerWeightRequestDTOs()
+                .forEach(dto -> IngredientPricePerWeight.builder()
+                        .weight(dto.weight())
+                        .price(dto.price())
+                        .ingredient(ingredient)
+                        .build());
+
+        // todo product tag
+        ingredientSaveRequestDto.productTag().forEach(productTagName -> {
+            ProductTag productTag = productTagRepository.findByName(productTagName)
+                    .orElseGet(() -> productTagRepository.save(ProductTag.builder()
+                            .name(productTagName).build()));
+
+            IngredientProductTag ingredientProductTag = IngredientProductTag.builder()
+                    .ingredient(ingredient)
+                    .productTag(productTag)
+                    .build();
+        });
+
         return IngredientInfoResponseDTO.from(farm, ingredient);
     }
 
@@ -61,11 +79,6 @@ public class IngredientService {
                 .findByName(ingredientSaveRequestDto.ingredientCategory())
                 .orElseThrow(IngredientCategoryNotFoundException::new);
 
-//        List<IngredientPricePerWeight> ingredientPricePerWeights = IngredientPricePerWeightRequestDTOs
-//                .mapToIngredientPricePerWeights(ingredientSaveRequestDto.ingredientPricePerWeightRequestDTOs());
-
-        // todo product tag
-        // todo product prices
         return Ingredient.builder()
                 .farm(farm)
                 .ingredientName(ingredientSaveRequestDto.ingredientName())

@@ -2,6 +2,8 @@ package shop.nongdam.nongdambackend.ingredient.api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 public record IngredientSaveRequestDTO(
         @NotBlank(message = "식표품 사진(링크)는 필수 입력값입니다.")
         String thumbnail,
@@ -13,10 +15,9 @@ public record IngredientSaveRequestDTO(
         String uglyReason,
         @NotBlank(message = "못난이 이유 설명은 필수 입력값입니다.")
         String uglyDescription,
-        @NotBlank(message = "상품 태그는 필수 입력값입니다.")
-        String productTag,
+        List<String> productTag,
         @NotBlank(message = "식료품 상세 설명은 필수 입력값입니다.")
         String ingredientDescription,
-        IngredientPricePerWeightRequestDTOs ingredientPricePerWeightRequestDTOs
+        List<IngredientPricePerWeightRequestDTO> ingredientPricePerWeightRequestDTOs
 ) {
 }
