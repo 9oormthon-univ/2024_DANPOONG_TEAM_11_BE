@@ -26,4 +26,10 @@ public class IngredientController implements IngredientDocs{
 
         return ApiResponseTemplate.created("식료품 등록 성공", ingredientInfoResponseDTO);
     }
+
+    @GetMapping("{ingredientId}")
+    public ApiResponseTemplate<IngredientInfoResponseDTO> findById(@PathVariable Long ingredientId){
+        IngredientInfoResponseDTO ingredientInfoResponseDTO = ingredientService.findById(ingredientId);
+        return ApiResponseTemplate.ok("식료품 상세 조회 성공", ingredientInfoResponseDTO);
+    }
 }

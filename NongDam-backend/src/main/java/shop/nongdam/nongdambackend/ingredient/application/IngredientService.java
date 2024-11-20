@@ -15,6 +15,7 @@ import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientCatego
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientRepository;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientUglyReasonRepository;
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientCategoryNotFoundException;
+import shop.nongdam.nongdambackend.ingredient.exception.IngredientNotFoundException;
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientUglyReasonNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
@@ -66,5 +67,12 @@ public class IngredientService {
                 .ingredientCategory(ingredientCategory)
                 .price(ingredientSaveRequestDto.price())
                 .build();
+    }
+
+    public IngredientInfoResponseDTO findById(Long ingredientId) {
+        Ingredient ingredient = ingredientRepository.findById(ingredientId)
+                .orElseThrow(IngredientNotFoundException::new);
+
+        return IngredientInfoResponseDTO.from(ingredient);
     }
 }
