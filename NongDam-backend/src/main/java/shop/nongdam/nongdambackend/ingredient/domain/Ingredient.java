@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,37 +26,26 @@ public class Ingredient extends BaseEntity {
     @JoinColumn(name = "ingredient_ugly_reason_id", nullable = false)
     private IngredientUglyReason ingredientUglyReason;
 
-    @Column(name = "ugly_description", nullable = false)
-    private String uglyDescription;
-
     @Column(name = "ingredient_description", nullable = false)
     private String ingredientDescription;
 
-    private String thumbnail;
+    //todo: 이미지 파일 여러개
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_category_id", nullable = false)
     private IngredientCategory ingredientCategory;
 
-    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<IngredientPricePerWeight> ingredientPricePerWeights;
-
-    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<IngredientProductTag> ingredientProductTags;
+    private Long price;
 
     @Builder
     public Ingredient(Farm farm, String ingredientName, IngredientUglyReason ingredientUglyReason,
-                      String uglyDescription, String ingredientDescription, String thumbnail,
-                      IngredientCategory ingredientCategory, List<IngredientPricePerWeight> ingredientPricePerWeights,
-                      List<IngredientProductTag> ingredientProductTags) {
+                      String ingredientDescription, IngredientCategory ingredientCategory, Long price) {
         this.farm = farm;
         this.ingredientName = ingredientName;
         this.ingredientUglyReason = ingredientUglyReason;
-        this.uglyDescription = uglyDescription;
         this.ingredientDescription = ingredientDescription;
-        this.thumbnail = thumbnail;
         this.ingredientCategory = ingredientCategory;
-        this.ingredientPricePerWeights = ingredientPricePerWeights;
-        this.ingredientProductTags = ingredientProductTags;
+        this.price = price;
+
     }
 }

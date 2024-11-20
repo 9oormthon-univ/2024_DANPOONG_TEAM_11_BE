@@ -8,3 +8,5 @@ import java.util.Optional;
 public interface IngredientUglyReasonRepository extends JpaRepository<IngredientUglyReason, Long> {
     Optional<IngredientUglyReason> findByName(String name);
 }
+
+

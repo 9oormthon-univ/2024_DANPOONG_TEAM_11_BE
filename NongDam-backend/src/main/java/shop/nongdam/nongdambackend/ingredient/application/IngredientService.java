@@ -14,7 +14,6 @@ import shop.nongdam.nongdambackend.ingredient.domain.*;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientCategoryRepository;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientRepository;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientUglyReasonRepository;
-import shop.nongdam.nongdambackend.ingredient.domain.repository.ProductTagRepository;
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientCategoryNotFoundException;
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientUglyReasonNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
@@ -29,7 +28,6 @@ public class IngredientService {
     private final FarmRepository farmRepository;
     private final IngredientUglyReasonRepository ingredientUglyReasonRepository;
     private final IngredientCategoryRepository ingredientCategoryRepository;
-    private final ProductTagRepository productTagRepository;
 
     @Transactional
     public IngredientInfoResponseDTO saveIngredientInfo(
@@ -48,26 +46,7 @@ public class IngredientService {
         Ingredient ingredient = buildNewIngredient(farm, ingredientSaveRequestDto);
         ingredientRepository.save(ingredient);
 
-        ingredientSaveRequestDto.ingredientPricePerWeightRequestDTOs()
-                .forEach(dto -> IngredientPricePerWeight.builder()
-                        .weight(dto.weight())
-                        .price(dto.price())
-                        .ingredient(ingredient)
-                        .build());
-
-        // todo product tag
-        ingredientSaveRequestDto.productTag().forEach(productTagName -> {
-            ProductTag productTag = productTagRepository.findByName(productTagName)
-                    .orElseGet(() -> productTagRepository.save(ProductTag.builder()
-                            .name(productTagName).build()));
-
-            IngredientProductTag ingredientProductTag = IngredientProductTag.builder()
-                    .ingredient(ingredient)
-                    .productTag(productTag)
-                    .build();
-        });
-
-        return IngredientInfoResponseDTO.from(farm, ingredient);
+        return IngredientInfoResponseDTO.from(ingredient);
     }
 
     private Ingredient buildNewIngredient(Farm farm, IngredientSaveRequestDTO ingredientSaveRequestDto) {
@@ -83,10 +62,9 @@ public class IngredientService {
                 .farm(farm)
                 .ingredientName(ingredientSaveRequestDto.ingredientName())
                 .ingredientUglyReason(ingredientUglyReason)
-                .uglyDescription(ingredientSaveRequestDto.uglyDescription())
                 .ingredientDescription(ingredientSaveRequestDto.ingredientDescription())
-                .thumbnail(ingredientSaveRequestDto.thumbnail())
                 .ingredientCategory(ingredientCategory)
+                .price(ingredientSaveRequestDto.price())
                 .build();
     }
 }

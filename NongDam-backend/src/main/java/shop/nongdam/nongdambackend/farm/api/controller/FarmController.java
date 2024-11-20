@@ -10,6 +10,8 @@ import shop.nongdam.nongdambackend.farm.application.FarmService;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
 
+// todo region <- address에서 매칭되는 주소 저장되게
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/farms")

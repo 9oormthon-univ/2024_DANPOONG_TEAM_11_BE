@@ -21,7 +21,6 @@ public class IngredientController implements IngredientDocs{
             @CurrentMemberEmail String email,
             @RequestBody IngredientSaveRequestDTO ingredientSaveRequestDto
     ){
-        // TODO request dto <- dtos 대신 list 사용
         IngredientInfoResponseDTO ingredientInfoResponseDTO = ingredientService
                 .saveIngredientInfo(email, farmId, ingredientSaveRequestDto);
 
