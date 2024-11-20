@@ -1,6 +1,8 @@
 package shop.nongdam.nongdambackend.ingredient.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.nongdam.nongdambackend.auth.exception.EmailNotFoundException;
@@ -8,8 +10,10 @@ import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.farm.domain.repository.FarmRepository;
 import shop.nongdam.nongdambackend.farm.exception.FarmAccessDeniedException;
 import shop.nongdam.nongdambackend.farm.exception.FarmNotFoundException;
+import shop.nongdam.nongdambackend.global.dto.PageInfoResDto;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
+import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTOs;
 import shop.nongdam.nongdambackend.ingredient.domain.*;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientCategoryRepository;
 import shop.nongdam.nongdambackend.ingredient.domain.repository.IngredientRepository;
@@ -19,6 +23,8 @@ import shop.nongdam.nongdambackend.ingredient.exception.IngredientNotFoundExcept
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientUglyReasonNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +80,14 @@ public class IngredientService {
                 .orElseThrow(IngredientNotFoundException::new);
 
         return IngredientInfoResponseDTO.from(ingredient);
+    }
+
+    public IngredientInfoResponseDTOs findAll(Pageable pageable) {
+        Page<Ingredient> ingredients = ingredientRepository.findAllIngredients(pageable);
+
+        List<IngredientInfoResponseDTO> ingredientInfoResponseDTOs = ingredients.stream()
+                .map(IngredientInfoResponseDTO::from)
+                .toList();
+        return IngredientInfoResponseDTOs.of(ingredientInfoResponseDTOs, PageInfoResDto.from(ingredients));
     }
 }
