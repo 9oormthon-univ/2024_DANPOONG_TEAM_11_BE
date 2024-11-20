@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestBody;
 import shop.nongdam.nongdambackend.farm.api.dto.request.FarmSaveRequestDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
@@ -38,7 +39,7 @@ public interface FarmDocs {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    ApiResponseTemplate<FarmInfoResponseDTO> findById(
+    ApiResponseTemplate<FarmDetailInfoResponseDTO> findById(
             @Parameter(description = "농산물 판매자 ID", required = true) Long farmId
     );
 

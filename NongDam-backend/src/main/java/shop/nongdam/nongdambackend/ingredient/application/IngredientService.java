@@ -51,6 +51,7 @@ public class IngredientService {
         if(!farm.getId().equals(farmId)) throw new FarmAccessDeniedException();
 
         Ingredient ingredient = buildNewIngredient(farm, ingredientSaveRequestDto);
+        farm.addIngredient(ingredient);
         ingredientRepository.save(ingredient);
 
         return IngredientInfoResponseDTO.from(ingredient);

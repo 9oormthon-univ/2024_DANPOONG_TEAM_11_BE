@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.nongdam.nongdambackend.auth.exception.EmailNotFoundException;
 import shop.nongdam.nongdambackend.farm.api.dto.request.FarmSaveRequestDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
@@ -50,11 +51,11 @@ public class FarmService {
         return FarmInfoResponseDTO.from(farm);
     }
 
-    public FarmInfoResponseDTO findById(Long farmId) {
+    public FarmDetailInfoResponseDTO findById(Long farmId) {
         Farm farm = farmRepository.findById(farmId)
                 .orElseThrow(FarmNotFoundException::new);
 
-        return FarmInfoResponseDTO.from(farm);
+        return FarmDetailInfoResponseDTO.from(farm);
     }
 
     public FarmInfoResponseDTOs findAll(Pageable pageable) {

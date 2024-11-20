@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import shop.nongdam.nongdambackend.farm.api.dto.request.FarmSaveRequestDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.farm.application.FarmService;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
-
-// todo region <- address에서 매칭되는 주소 저장되게
 
 @RestController
 @RequiredArgsConstructor
@@ -30,9 +29,9 @@ public class FarmController implements FarmDocs{
 
     @Override
     @GetMapping("{farmId}")
-    public ApiResponseTemplate<FarmInfoResponseDTO> findById(@PathVariable Long farmId){
-        FarmInfoResponseDTO farmInfoResponseDTO = farmService.findById(farmId);
-        return ApiResponseTemplate.ok("농산물 생산자 상세 조회 성공", farmInfoResponseDTO);
+    public ApiResponseTemplate<FarmDetailInfoResponseDTO> findById(@PathVariable Long farmId){
+        FarmDetailInfoResponseDTO farmDetailInfoResponseDTO = farmService.findById(farmId);
+        return ApiResponseTemplate.ok("농산물 생산자 상세 조회 성공", farmDetailInfoResponseDTO);
     }
 
     @Override

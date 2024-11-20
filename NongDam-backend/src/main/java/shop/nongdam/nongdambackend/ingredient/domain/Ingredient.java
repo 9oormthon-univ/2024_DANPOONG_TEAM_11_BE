@@ -1,10 +1,7 @@
 package shop.nongdam.nongdambackend.ingredient.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ingredient extends BaseEntity {
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
@@ -48,4 +46,5 @@ public class Ingredient extends BaseEntity {
         this.price = price;
 
     }
+
 }
