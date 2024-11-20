@@ -55,4 +55,18 @@ public interface FarmDocs {
             @Parameter(description = "페이지 번호", required = true) int page,
             @Parameter(description = "한 페이지 크기", required = true) int size
     );
+
+    @Operation(summary = "농산물 판매자 뱃지 부여", description = "농산물 판매자에게 뱃지를 부여합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "농산물 판매자 뱃지 부여 성공",
+                            content = @Content(schema = @Schema(implementation = FarmDetailInfoResponseDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "404", description = "농산물 판매자 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 오류")
+            }
+    )
+    ApiResponseTemplate<FarmDetailInfoResponseDTO> giveBadge(
+            @Parameter(description = "농산물 판매자 ID", required = true) Long farmId,
+            @Parameter(description = "뱃지 이름", required = true) String badgeName
+    );
 }

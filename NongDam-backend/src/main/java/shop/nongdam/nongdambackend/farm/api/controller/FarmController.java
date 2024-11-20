@@ -24,6 +24,7 @@ public class FarmController implements FarmDocs{
             @RequestBody FarmSaveRequestDTO farmSaveRequestDTO
     ){
         FarmInfoResponseDTO farmInfoResponseDTO = farmService.saveFarmInfo(email, farmSaveRequestDTO);
+
         return ApiResponseTemplate.created("농산물 생산자 등록 성공", farmInfoResponseDTO);
     }
 
@@ -42,5 +43,15 @@ public class FarmController implements FarmDocs{
     ){
         FarmInfoResponseDTOs farmInfoResponseDTOs = farmService.findAll(PageRequest.of(page, size));
         return ApiResponseTemplate.ok("농가 전체 조회 성공", farmInfoResponseDTOs);
+    }
+
+    @Override
+    @GetMapping("{farmId}/badges/{badgeName}")
+    public ApiResponseTemplate<FarmDetailInfoResponseDTO> giveBadge(
+            @PathVariable Long farmId,
+            @PathVariable String badgeName
+    ){
+        FarmDetailInfoResponseDTO farmDetailInfoResponseDTO = farmService.giveBadge(farmId, badgeName);
+        return ApiResponseTemplate.ok("농가 뱃지 부여 성공", farmDetailInfoResponseDTO);
     }
 }
