@@ -4,31 +4,24 @@ import lombok.Builder;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 
 @Builder
-public record FarmInfoResponseDTO(
+public record FarmSummaryResponseDTO(
         Long farmId,
         String farmName,
         String profileImage,
         String farmRepresentative,
         String phoneNumber,
-        String businessRegistrationNumber,
         String address,
-        String region,
-        Double latitude,
-        Double longitude
-
-){
-    public static FarmInfoResponseDTO from(Farm farm) {
-        return FarmInfoResponseDTO.builder()
+        String region
+) {
+    public static FarmSummaryResponseDTO from(Farm farm){
+        return FarmSummaryResponseDTO.builder()
                 .farmId(farm.getId())
                 .farmName(farm.getFarmName())
                 .profileImage(farm.getProfileImage())
                 .farmRepresentative(farm.getFarmRepresentative())
                 .phoneNumber(farm.getPhoneNumber())
-                .businessRegistrationNumber(String.valueOf(farm.getBusinessRegistrationNumber()))
                 .address(farm.getAddress())
                 .region(farm.getRegion().getName())
-                .latitude(farm.getLatitude())
-                .longitude(farm.getLongitude())
                 .build();
     }
 }
