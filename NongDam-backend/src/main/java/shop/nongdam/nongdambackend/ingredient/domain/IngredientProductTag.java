@@ -15,7 +15,7 @@ public class IngredientProductTag {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("ingredientId")
-    @JoinColumn(name = "ingredient_id", nullable = false)
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
     @ManyToOne(fetch = FetchType.LAZY)

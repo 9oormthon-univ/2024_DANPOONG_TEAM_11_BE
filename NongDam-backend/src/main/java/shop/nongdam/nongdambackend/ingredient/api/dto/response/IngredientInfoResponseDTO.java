@@ -19,11 +19,11 @@ public record IngredientInfoResponseDTO(
         List<IngredientPricePerWeightResponseDTO> ingredientPricePerWeightResponseDTOs
 ) {
     public static IngredientInfoResponseDTO from(Farm farm, Ingredient ingredient){
-        List<IngredientPricePerWeightResponseDTO> ingredientPricePerWeightResponseDTOs = ingredient
-                .getIngredientPricePerWeights()
-                .stream()
-                .map(IngredientPricePerWeightResponseDTO::from)
-                .toList();
+//        List<IngredientPricePerWeightResponseDTO> ingredientPricePerWeightResponseDTOs = ingredient
+//                .getIngredientPricePerWeights()
+//                .stream()
+//                .map(IngredientPricePerWeightResponseDTO::from)
+//                .toList();
 
 
         return IngredientInfoResponseDTO.builder()
@@ -33,7 +33,7 @@ public record IngredientInfoResponseDTO(
                 .uglyReason(ingredient.getIngredientUglyReason().getName())
                 .uglyReasonDescription(ingredient.getUglyDescription())
                 .ingredientDescription(ingredient.getIngredientDescription())
-                .ingredientPricePerWeightResponseDTOs(ingredientPricePerWeightResponseDTOs)
+//                .ingredientPricePerWeightResponseDTOs(ingredientPricePerWeightResponseDTOs)
                 .build();
     }
 }

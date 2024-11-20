@@ -15,7 +15,8 @@ public class IngredientPricePerWeight {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ingredient_id", nullable = false)
+    @JoinColumn(name = "ingredient_id")
+//    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
     @Column(nullable = false)

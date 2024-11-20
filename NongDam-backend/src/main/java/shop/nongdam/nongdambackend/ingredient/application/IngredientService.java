@@ -32,6 +32,7 @@ public class IngredientService {
     private final IngredientUglyReasonRepository ingredientUglyReasonRepository;
     private final IngredientCategoryRepository ingredientCategoryRepository;
 
+    @Transactional
     public IngredientInfoResponseDTO saveIngredientInfo(
             String email,
             Long farmId,
@@ -60,10 +61,11 @@ public class IngredientService {
                 .findByName(ingredientSaveRequestDto.ingredientCategory())
                 .orElseThrow(IngredientCategoryNotFoundException::new);
 
-        List<IngredientPricePerWeight> ingredientPricePerWeights = IngredientPricePerWeightRequestDTOs
-                .mapToIngredientPricePerWeights(ingredientSaveRequestDto.ingredientPricePerWeightRequestDTOs());
+//        List<IngredientPricePerWeight> ingredientPricePerWeights = IngredientPricePerWeightRequestDTOs
+//                .mapToIngredientPricePerWeights(ingredientSaveRequestDto.ingredientPricePerWeightRequestDTOs());
 
         // todo product tag
+        // todo product prices
         return Ingredient.builder()
                 .farm(farm)
                 .ingredientName(ingredientSaveRequestDto.ingredientName())
@@ -72,7 +74,6 @@ public class IngredientService {
                 .ingredientDescription(ingredientSaveRequestDto.ingredientDescription())
                 .thumbnail(ingredientSaveRequestDto.thumbnail())
                 .ingredientCategory(ingredientCategory)
-                .ingredientPricePerWeights(ingredientPricePerWeights)
                 .build();
     }
 }
