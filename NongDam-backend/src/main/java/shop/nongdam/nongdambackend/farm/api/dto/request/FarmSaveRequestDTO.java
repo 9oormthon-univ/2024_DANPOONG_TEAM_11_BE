@@ -14,8 +14,6 @@ public record FarmSaveRequestDTO(
         Long businessRegistrationNumber,
         @NotBlank(message = "주소는 필수 입력값입니다.")
         String address,
-        @NotBlank(message = "지역은 필수 입력값입니다.")
-        String region,
         Double latitude,
         Double longitude
 ) {
