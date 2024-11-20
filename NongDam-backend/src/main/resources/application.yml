@@ -29,3 +29,8 @@ oauth:
   kakao:
     rest-api-key: ${OAUTH_KAKAO_REST_API_KEY}
     redirect-url: ${OAUTH_KAKAO_REDIRECT_URL}
+
+aws:
+  s3:
+    accessKey: ${S3_ACCESS_KEY}
+    secretKey: ${S3_SECRET_KEY}
