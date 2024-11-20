@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.restaurant.domain.Restaurant;
 
 @Entity
@@ -26,4 +27,7 @@ public class Region {
 
     @OneToMany(mappedBy = "region", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Restaurant> restaurant;
+
+    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Farm> farm;
 }
