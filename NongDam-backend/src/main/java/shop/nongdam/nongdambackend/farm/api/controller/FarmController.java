@@ -12,7 +12,7 @@ import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/farm")
+@RequestMapping("/api/farms")
 public class FarmController implements FarmDocs{
     private final FarmService farmService;
 
