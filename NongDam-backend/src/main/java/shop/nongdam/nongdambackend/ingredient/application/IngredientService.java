@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.nongdam.nongdambackend.auth.exception.EmailNotFoundException;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.farm.domain.repository.FarmRepository;
 import shop.nongdam.nongdambackend.farm.exception.FarmAccessDeniedException;
@@ -23,6 +25,9 @@ import shop.nongdam.nongdambackend.ingredient.exception.IngredientNotFoundExcept
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientUglyReasonNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
+import shop.nongdam.nongdambackend.region.domain.Region;
+import shop.nongdam.nongdambackend.region.domain.repository.RegionRepository;
+import shop.nongdam.nongdambackend.region.exception.RegionNotFoundException;
 
 import java.util.List;
 
@@ -35,6 +40,7 @@ public class IngredientService {
     private final FarmRepository farmRepository;
     private final IngredientUglyReasonRepository ingredientUglyReasonRepository;
     private final IngredientCategoryRepository ingredientCategoryRepository;
+    private final RegionRepository regionRepository;
 
     @Transactional
     public IngredientInfoResponseDTO saveIngredientInfo(
@@ -83,12 +89,34 @@ public class IngredientService {
         return IngredientInfoResponseDTO.from(ingredient);
     }
 
-    public IngredientInfoResponseDTOs findAll(Pageable pageable) {
-        Page<Ingredient> ingredients = ingredientRepository.findAllIngredients(pageable);
+    public IngredientInfoResponseDTOs findAll(String category, String region, Pageable pageable) {
+        Page<Ingredient> ingredientsPage = ingredientRepository.findAllIngredients(pageable);
+        List<Ingredient> ingredients = ingredientsPage.getContent();
+
+        if (!category.equals("전체") || !region.equals("전체")) {
+            if (!category.equals("전체")) {
+                IngredientCategory matchedCategory = ingredientCategoryRepository.findByName(category)
+                        .orElseThrow(IngredientCategoryNotFoundException::new);
+
+                ingredients = ingredients.stream()
+                        .filter(ingredient -> ingredient.getIngredientCategory().equals(matchedCategory))
+                        .toList();
+            }
+
+            if (!region.equals("전체")) {
+                Region matchedRegion = regionRepository.findByName(region)
+                        .orElseThrow(RegionNotFoundException::new);
+
+                ingredients = ingredients.stream()
+                        .filter(ingredient -> ingredient.getFarm().getRegion().equals(matchedRegion))
+                        .toList();
+            }
+        }
 
         List<IngredientInfoResponseDTO> ingredientInfoResponseDTOs = ingredients.stream()
                 .map(IngredientInfoResponseDTO::from)
                 .toList();
-        return IngredientInfoResponseDTOs.of(ingredientInfoResponseDTOs, PageInfoResDto.from(ingredients));
+
+        return IngredientInfoResponseDTOs.of(ingredientInfoResponseDTOs, PageInfoResDto.from(ingredientsPage));
     }
 }

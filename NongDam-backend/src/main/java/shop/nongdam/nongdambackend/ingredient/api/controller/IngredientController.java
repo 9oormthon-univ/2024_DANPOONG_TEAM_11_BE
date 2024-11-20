@@ -37,10 +37,12 @@ public class IngredientController implements IngredientDocs{
 
     @GetMapping
     public ApiResponseTemplate<IngredientInfoResponseDTOs> findAll(
+            @RequestParam(defaultValue = "전체", name = "category") String category,
+            @RequestParam(defaultValue = "전체", name = "region") String region,
             @RequestParam(defaultValue = "0", name = "page") int page,
             @RequestParam(defaultValue = "10", name = "size") int size
     ){
-        IngredientInfoResponseDTOs ingredientInfoResponseDTOs = ingredientService.findAll(PageRequest.of(page, size));
+        IngredientInfoResponseDTOs ingredientInfoResponseDTOs = ingredientService.findAll(category, region, PageRequest.of(page, size));
         return ApiResponseTemplate.ok("식료품 전체 조회 성공", ingredientInfoResponseDTOs);
     }
 }
