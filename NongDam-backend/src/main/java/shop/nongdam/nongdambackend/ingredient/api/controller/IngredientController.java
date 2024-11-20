@@ -10,7 +10,7 @@ import shop.nongdam.nongdambackend.ingredient.application.IngredientService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ingredient")
+@RequestMapping("/api/ingredients")
 public class IngredientController {
     public final IngredientService ingredientService;
 
