@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class Member extends BaseEntity {
     private String certificate;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Restaurant> restaurant;
+    private List<Restaurant> restaurants = new ArrayList<>();
 
     @Builder
     public Member(String email, String name, String picture, SocialType socialType, Role role, boolean firstLogin,
