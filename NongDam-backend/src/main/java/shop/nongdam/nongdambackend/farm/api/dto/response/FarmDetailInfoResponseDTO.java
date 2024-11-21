@@ -2,9 +2,13 @@ package shop.nongdam.nongdambackend.farm.api.dto.response;
 
 import lombok.Builder;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
+import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
+import shop.nongdam.nongdambackend.ingredient.domain.Ingredient;
+
+import java.util.List;
 
 @Builder
-public record FarmInfoResponseDTO(
+public record FarmDetailInfoResponseDTO(
         Long farmId,
         String farmName,
         String profileImage,
@@ -14,11 +18,13 @@ public record FarmInfoResponseDTO(
         String address,
         String region,
         Double latitude,
-        Double longitude
+        Double longitude,
+        List<IngredientInfoResponseDTO> ingredients
+) {
+    public static FarmDetailInfoResponseDTO from(Farm farm) {
 
-){
-    public static FarmInfoResponseDTO from(Farm farm) {
-        return FarmInfoResponseDTO.builder()
+
+        return FarmDetailInfoResponseDTO.builder()
                 .farmId(farm.getId())
                 .farmName(farm.getFarmName())
                 .profileImage(farm.getProfileImage())
@@ -29,6 +35,8 @@ public record FarmInfoResponseDTO(
                 .region(farm.getRegion().getName())
                 .latitude(farm.getLatitude())
                 .longitude(farm.getLongitude())
+                .ingredients(farm.getIngredients().stream()
+                        .map(IngredientInfoResponseDTO::from).toList())
                 .build();
     }
 }

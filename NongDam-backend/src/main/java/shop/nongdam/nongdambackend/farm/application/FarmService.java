@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.nongdam.nongdambackend.auth.exception.EmailNotFoundException;
 import shop.nongdam.nongdambackend.farm.api.dto.request.FarmSaveRequestDTO;
+import shop.nongdam.nongdambackend.farm.api.dto.response.FarmDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
@@ -22,6 +23,7 @@ import shop.nongdam.nongdambackend.region.domain.repository.RegionRepository;
 import shop.nongdam.nongdambackend.region.exception.RegionNotFoundException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -49,11 +51,11 @@ public class FarmService {
         return FarmInfoResponseDTO.from(farm);
     }
 
-    public FarmInfoResponseDTO findById(Long farmId) {
+    public FarmDetailInfoResponseDTO findById(Long farmId) {
         Farm farm = farmRepository.findById(farmId)
                 .orElseThrow(FarmNotFoundException::new);
 
-        return FarmInfoResponseDTO.from(farm);
+        return FarmDetailInfoResponseDTO.from(farm);
     }
 
     public FarmInfoResponseDTOs findAll(Pageable pageable) {
@@ -67,8 +69,34 @@ public class FarmService {
     }
 
     private Farm buildNewFarm(Member member, FarmSaveRequestDTO farmSaveRequestDTO){
-        Region region = regionRepository.findByName(farmSaveRequestDTO.region())
-                .orElseThrow(RegionNotFoundException::new);
+        String address = farmSaveRequestDTO.address();
+        Region matchedRegion = null;
+
+        Map<String, List<String>> regionKeywords = Map.of(
+                "서울", List.of("서울"),
+                "경기/인천", List.of("경기", "인천"),
+                "강원", List.of("강원"),
+                "대전/세종", List.of("대전", "세종"),
+                "충남/충북", List.of("충남", "충북", "충청남도", "충청북도"),
+                "전남/전북", List.of("광주", "전남", "전북", "전라남도", "전라북도"),
+                "경남/경북", List.of("대구", "경북", "경남", "경상북도", "경상남도"),
+                "부산", List.of("부산", "울산"),
+                "제주", List.of("제주")
+        );
+
+        for (Map.Entry<String, List<String>> entry : regionKeywords.entrySet()) {
+            for (String keyword : entry.getValue()) {
+                if (address.contains(keyword)) {
+                    matchedRegion = regionRepository.findByName(entry.getKey())
+                            .orElseThrow(RegionNotFoundException::new);
+                    break;
+                }
+            }
+            if (matchedRegion != null) {
+                break;
+            }
+        }
+
 
         return Farm.builder()
                 .member(member)
@@ -78,7 +106,7 @@ public class FarmService {
                 .phoneNumber(farmSaveRequestDTO.phoneNumber())
                 .businessRegistrationNumber(farmSaveRequestDTO.businessRegistrationNumber())
                 .address(farmSaveRequestDTO.address())
-                .region(region)
+                .region(matchedRegion)
                 .latitude(farmSaveRequestDTO.latitude())
                 .longitude(farmSaveRequestDTO.longitude())
                 .build();

@@ -6,8 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
+import shop.nongdam.nongdambackend.ingredient.domain.Ingredient;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.region.domain.Region;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,11 +48,14 @@ public class Farm extends BaseEntity  {
     @JoinColumn(name = "region_id")
     private Region region;
 
+    @OneToMany(mappedBy = "farm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ingredient> ingredients = new ArrayList<>();
+
     @Builder
     public Farm(Member member, String farmName, String profileImage,
                 String farmRepresentative, String phoneNumber,
                 Long businessRegistrationNumber, String address,
-                Region region, Double latitude, Double longitude) {
+                Region region, Double latitude, Double longitude, List<Ingredient> ingredients) {
         this.member = member;
         this.farmName = farmName;
         this.profileImage = profileImage;
@@ -59,5 +66,11 @@ public class Farm extends BaseEntity  {
         this.region = region;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.ingredients = ingredients == null ? new ArrayList<>() : ingredients;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        ingredient.setFarm(this);
     }
 }

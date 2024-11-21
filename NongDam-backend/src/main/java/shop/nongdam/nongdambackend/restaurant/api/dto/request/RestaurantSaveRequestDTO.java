@@ -1,7 +1,6 @@
 package shop.nongdam.nongdambackend.restaurant.api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record RestaurantSaveRequestDTO(
         @NotBlank(message = "식당 이름은 필수 입력값입니다.")
