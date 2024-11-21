@@ -1,20 +1,18 @@
 package shop.nongdam.nongdambackend.farm.domain;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+@AllArgsConstructor
 public class FarmBadgeAssignmentId implements Serializable {
     private Long farmId;
     private Long badgeId;
 
     public FarmBadgeAssignmentId() {}
-
-    public FarmBadgeAssignmentId(Long farmId, Long badgeId) {
-        this.farmId = farmId;
-        this.badgeId = badgeId;
-    }
 
     @Override
     public boolean equals(Object o) {
