@@ -19,6 +19,7 @@ public class SwaggerConfig {
 
     @Value("${server.url}")
     private String prodUrl;
+
     @Bean
     public OpenAPI nongDamAPI() {
         Info info = new Info()
