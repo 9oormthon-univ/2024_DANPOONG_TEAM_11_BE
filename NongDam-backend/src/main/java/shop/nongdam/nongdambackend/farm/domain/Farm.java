@@ -51,6 +51,10 @@ public class Farm extends BaseEntity  {
     @OneToMany(mappedBy = "farm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients = new ArrayList<>();
 
+    @OneToMany(mappedBy = "farm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FarmBadgeAssignment> farmBadges = new ArrayList<>();
+
+
     @Builder
     public Farm(Member member, String farmName, String profileImage,
                 String farmRepresentative, String phoneNumber,
@@ -72,5 +76,10 @@ public class Farm extends BaseEntity  {
     public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);
         ingredient.setFarm(this);
+    }
+
+    public void addFarmBadge(FarmBadge farmBadge) {
+        FarmBadgeAssignment assignment = new FarmBadgeAssignment(this, farmBadge);
+        farmBadges.add(assignment);
     }
 }

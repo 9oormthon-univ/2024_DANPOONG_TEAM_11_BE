@@ -62,3 +62,15 @@ FROM (
          SELECT '상처났어요'
      ) AS t
 WHERE NOT EXISTS (SELECT 1 FROM ingredient_ugly_reason WHERE name = t.name);
+
+INSERT INTO farm_badge (name)
+SELECT name
+FROM (
+         SELECT '원산지 인증' AS name
+         UNION
+         SELECT '당일포장 당일배송'
+         UNION
+         SELECT '빠른 답장'
+     ) AS t
+WHERE NOT EXISTS (SELECT 1 FROM farm_badge WHERE name = t.name);
+

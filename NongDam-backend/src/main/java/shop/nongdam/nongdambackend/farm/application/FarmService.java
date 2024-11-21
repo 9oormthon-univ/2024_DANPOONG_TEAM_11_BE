@@ -11,10 +11,13 @@ import shop.nongdam.nongdambackend.farm.api.dto.response.FarmDetailInfoResponseD
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
 import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
+import shop.nongdam.nongdambackend.farm.domain.FarmBadge;
+import shop.nongdam.nongdambackend.farm.domain.repository.FarmBadgeRepository;
 import shop.nongdam.nongdambackend.farm.domain.repository.FarmRepository;
 import shop.nongdam.nongdambackend.farm.exception.FarmAlreadyExistException;
 import shop.nongdam.nongdambackend.farm.exception.FarmNotFoundException;
 import shop.nongdam.nongdambackend.global.dto.PageInfoResDto;
+import shop.nongdam.nongdambackend.farm.exception.FarmBadgeNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.member.domain.Role;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
@@ -33,6 +36,7 @@ public class FarmService {
     private final FarmRepository farmRepository;
     private final MemberRepository memberRepository;
     private final RegionRepository regionRepository;
+    private final FarmBadgeRepository farmBadgeRepository;
 
     @Transactional
     public FarmInfoResponseDTO saveFarmInfo(String email, FarmSaveRequestDTO farmSaveRequestDTO){
@@ -44,7 +48,11 @@ public class FarmService {
             throw new FarmAlreadyExistException();
         }
 
+        FarmBadge originCertificationBadge = farmBadgeRepository.findByName("원산지 인증")
+                .orElseThrow(FarmBadgeNotFoundException::new);
+
         Farm farm = buildNewFarm(member, farmSaveRequestDTO);
+        farm.addFarmBadge(originCertificationBadge);
         farmRepository.save(farm);
 
         member.updateRole(Role.ROLE_PRODUCER);
@@ -66,6 +74,17 @@ public class FarmService {
                 .toList();
 
         return FarmInfoResponseDTOs.of(farmInfoResponseDTOs, PageInfoResDto.from(farms));
+    }
+
+    public FarmDetailInfoResponseDTO giveBadge(Long farmId, String badgeName) {
+        Farm farm = farmRepository.findById(farmId)
+                .orElseThrow(FarmNotFoundException::new);
+
+        FarmBadge farmBadge = farmBadgeRepository.findByName(badgeName)
+                .orElseThrow(FarmBadgeNotFoundException::new);
+
+        farm.addFarmBadge(farmBadge);
+        return FarmDetailInfoResponseDTO.from(farm);
     }
 
     private Farm buildNewFarm(Member member, FarmSaveRequestDTO farmSaveRequestDTO){
@@ -111,6 +130,7 @@ public class FarmService {
                 .longitude(farmSaveRequestDTO.longitude())
                 .build();
     }
+
 
 
 }
