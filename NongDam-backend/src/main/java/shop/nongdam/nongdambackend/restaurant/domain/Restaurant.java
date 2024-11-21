@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 import shop.nongdam.nongdambackend.global.domain.BaseEntity;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.region.domain.Region;
+import shop.nongdam.nongdambackend.restaurant.menu.domain.Menu;
 
 @Entity
 @Getter
@@ -45,16 +47,16 @@ public class Restaurant extends BaseEntity {
     private double longitude;
 
     @Column(name = "represent_image")
-    private String representImage;
+    private String restaurantImage;
 
     @Column(name = "open_time")
-    private Long openTime;
+    private String openTime;
 
     @Column(name = "close_time")
-    private Long closeTime;
+    private String closeTime;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Menu> menu;
+    private List<Menu> menu = new ArrayList<>();
 
     @JoinColumn(name = "region_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -63,7 +65,7 @@ public class Restaurant extends BaseEntity {
     @Builder
     public Restaurant(String restaurantName, String restaurantRepresentative, Member member, String phoneNumber,
                       String businessRegistrationNumber, String address, double latitude, double longitude,
-                      String representImage, Long openTime, Long closeTime, List<Menu> menu, Region region) {
+                      String restaurantImage, String openTime, String closeTime, List<Menu> menu, Region region) {
         this.restaurantName = restaurantName;
         this.restaurantRepresentative = restaurantRepresentative;
         this.member = member;
@@ -72,10 +74,44 @@ public class Restaurant extends BaseEntity {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.representImage = representImage;
+        this.restaurantImage = restaurantImage;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.menu = menu;
         this.region = region;
+    }
+
+    public void updateAllFields(String restaurantName, String restaurantRepresentative, Member member,
+                                String phoneNumber,
+                                String businessRegistrationNumber, String address, double latitude, double longitude,
+                                String representImage, String openTime, String closeTime, List<Menu> menu,
+                                Region region) {
+        this.restaurantName = restaurantName;
+        this.restaurantRepresentative = restaurantRepresentative;
+        this.member = member;
+        this.phoneNumber = phoneNumber;
+        this.businessRegistrationNumber = businessRegistrationNumber;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.restaurantImage = representImage;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.menu = menu;
+        this.region = region;
+    }
+
+    public void updateDetail(double latitude, double longitude, String restaurantImage, String openTime,
+                             String closeTime) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.restaurantImage = restaurantImage;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+
+    }
+
+    public boolean isOwner(Member member) {
+        return this.member.equals(member);
     }
 }
