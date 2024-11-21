@@ -43,7 +43,7 @@ public class RestaurantController implements RestaurantDocs {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponseTemplate<RestaurantDetailInfoResponseDTO> registerRestaurantDetail(
             @CurrentMemberEmail String email,
-            @RequestPart RestaurantDetailSaveRequestDTO restaurantDetailSaveRequestDTO,
+            @Valid @RequestPart RestaurantDetailSaveRequestDTO restaurantDetailSaveRequestDTO,
             @RequestPart(value = "restaurantImage", required = false) MultipartFile restaurantImage) {
         return ApiResponseTemplate.ok("식당 상세 정보 등록 성공",
                 restaurantService.registerRestaurantDetail(email, restaurantDetailSaveRequestDTO, restaurantImage));
