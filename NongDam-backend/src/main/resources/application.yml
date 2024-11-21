@@ -46,3 +46,6 @@ aws:
     bucket-name: ${S3_BUCKET_NAME}
     image-path: ${S3_IMAGE_PATH}
     url-format: ${S3_URL_FORMAT}
+
+server:
+  url: ${PROD_URL}

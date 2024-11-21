@@ -7,6 +7,8 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.ArrayList;
+import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -14,8 +16,12 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 @Configuration
 public class SwaggerConfig {
+
+    @Value("${server.url}")
+    private String prodUrl;
+
     @Bean
-    public OpenAPI NongDamAPI() {
+    public OpenAPI nongDamAPI() {
         Info info = new Info()
                 .title("NongDam API")
                 .description("NongDam API 명세서")
@@ -30,9 +36,17 @@ public class SwaggerConfig {
                         .scheme("bearer")
                         .bearerFormat("JWT"));
 
+        Server prodServer = new Server()
+                .url(prodUrl)
+                .description("Production Server");
+
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Local Server");
+
         return new OpenAPI()
-                .addServersItem(new Server().url("/"))
                 .info(info)
+                .servers(Arrays.asList(prodServer, localServer))
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }
