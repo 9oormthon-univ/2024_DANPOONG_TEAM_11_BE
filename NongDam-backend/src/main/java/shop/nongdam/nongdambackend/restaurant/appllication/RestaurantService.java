@@ -33,13 +33,13 @@ public class RestaurantService {
 
     @Transactional
     public RestaurantInfoResponseDTO save(String memberEmail, RestaurantSaveRequestDTO restaurantSaveRequestDTO) {
-        Member member = memberRepository.findByEmail(memberEmail)
-                .orElseThrow(MemberNotFoundException::new);
+        Member member = getMemberByEmail(memberEmail);
 
         Restaurant restaurant = buildNewRestaurant(restaurantSaveRequestDTO, member);
         restaurantRepository.save(restaurant);
 
-        member.updateRole(Role.ROLE_RESTAURANT);
+        updateMemberRoleToRestaurant(member);
+
         return RestaurantInfoResponseDTO.from(restaurant);
     }
 
@@ -49,29 +49,18 @@ public class RestaurantService {
             RestaurantDetailSaveRequestDTO restaurantDetailSaveRequestDTO,
             MultipartFile restaurantImage) {
 
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(MemberNotFoundException::new);
-        Restaurant restaurant = restaurantRepository.findById(restaurantDetailSaveRequestDTO.restaurantId())
-                .orElseThrow(RestaurantNotFoundException::new);
+        Member member = getMemberByEmail(email);
+        Restaurant restaurant = getRestaurantById(restaurantDetailSaveRequestDTO.restaurantId());
 
-        if (!member.equals(restaurant.getMember())) {
-            throw new AccessDeniedRestaurantException();
-        }
+        validateRestaurantOwnership(member, restaurant);
 
-        restaurant.updateDetail(
-                restaurantDetailSaveRequestDTO.latitude(),
-                restaurantDetailSaveRequestDTO.longitude(),
-                imageService.saveImage(restaurantImage),
-                restaurantDetailSaveRequestDTO.openTime(),
-                restaurantDetailSaveRequestDTO.closeTime());
+        updateRestaurantDetails(restaurant, restaurantDetailSaveRequestDTO, restaurantImage);
 
         return RestaurantDetailInfoResponseDTO.from(restaurant);
     }
 
     public RestaurantInfoResponseDTO findById(Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(RestaurantNotFoundException::new);
-
+        Restaurant restaurant = getRestaurantById(restaurantId);
         return RestaurantInfoResponseDTO.from(restaurant);
     }
 
@@ -87,16 +76,44 @@ public class RestaurantService {
 
     @Transactional
     public void deleteById(String email, Long restaurantId) {
-        Member member = memberRepository.findByEmail(email)
+        Member member = getMemberByEmail(email);
+        Restaurant restaurant = getRestaurantById(restaurantId);
+
+        validateRestaurantOwnership(member, restaurant);
+        restaurant.delete();
+    }
+
+    private Member getMemberByEmail(String email) {
+        return memberRepository.findByEmail(email)
                 .orElseThrow(MemberNotFoundException::new);
+    }
 
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+    private Restaurant getRestaurantById(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
                 .orElseThrow(RestaurantNotFoundException::new);
+    }
 
+    private void validateRestaurantOwnership(Member member, Restaurant restaurant) {
         if (!restaurant.isOwner(member)) {
             throw new AccessDeniedRestaurantException();
         }
-        restaurant.delete();
+    }
+
+    private void updateMemberRoleToRestaurant(Member member) {
+        member.updateRole(Role.ROLE_RESTAURANT);
+    }
+
+    private void updateRestaurantDetails(
+            Restaurant restaurant,
+            RestaurantDetailSaveRequestDTO restaurantDetailSaveRequestDTO,
+            MultipartFile restaurantImage) {
+
+        restaurant.updateDetail(
+                restaurantDetailSaveRequestDTO.latitude(),
+                restaurantDetailSaveRequestDTO.longitude(),
+                imageService.saveImage(restaurantImage),
+                restaurantDetailSaveRequestDTO.openTime(),
+                restaurantDetailSaveRequestDTO.closeTime());
     }
 
     private Restaurant buildNewRestaurant(RestaurantSaveRequestDTO restaurantSaveRequestDTO, Member member) {

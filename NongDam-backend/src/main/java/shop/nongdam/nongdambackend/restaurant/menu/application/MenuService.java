@@ -27,19 +27,40 @@ public class MenuService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MenuInfoResponseDTO save(String email,MenuSaveRequestDTO menuSaveRequestDTO, MultipartFile menuImage) {
-        Member member = memberRepository.findByEmail(email)
+    public MenuInfoResponseDTO save(String email, MenuSaveRequestDTO menuSaveRequestDTO, MultipartFile menuImage) {
+        Member member = getMemberByEmail(email);
+        Restaurant restaurant = getRestaurantById(menuSaveRequestDTO.restaurantId());
+        validateRestaurantOwnership(member, restaurant);
+
+        String menuImageUrl = saveMenuImage(menuImage);
+        Menu menu = createNewMenu(menuSaveRequestDTO, menuImageUrl, restaurant);
+        menuRepository.save(menu);
+
+        return MenuInfoResponseDTO.from(menu);
+    }
+
+    private Member getMemberByEmail(String email) {
+        return memberRepository.findByEmail(email)
                 .orElseThrow(MemberNotFoundException::new);
+    }
 
-        Restaurant restaurant = restaurantRepository.findById(menuSaveRequestDTO.restaurantId())
+    private Restaurant getRestaurantById(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
                 .orElseThrow(RestaurantNotFoundException::new);
+    }
 
+    private void validateRestaurantOwnership(Member member, Restaurant restaurant) {
         if (!member.equals(restaurant.getMember())) {
             throw new AccessDeniedRestaurantException();
         }
+    }
 
-        String menuImageUrl = imageService.saveImage(menuImage);
-        Menu menu = Menu.builder()
+    private String saveMenuImage(MultipartFile menuImage) {
+        return imageService.saveImage(menuImage);
+    }
+
+    private Menu createNewMenu(MenuSaveRequestDTO menuSaveRequestDTO, String menuImageUrl, Restaurant restaurant) {
+        return Menu.builder()
                 .name(menuSaveRequestDTO.name())
                 .price(menuSaveRequestDTO.price())
                 .image(menuImageUrl)
@@ -48,8 +69,5 @@ public class MenuService {
                 .isMainMenu(menuSaveRequestDTO.isMainMenu())
                 .restaurant(restaurant)
                 .build();
-        menuRepository.save(menu);
-
-        return MenuInfoResponseDTO.from(menu);
     }
 }

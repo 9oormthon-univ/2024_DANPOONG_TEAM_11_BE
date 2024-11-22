@@ -2,7 +2,6 @@ package shop.nongdam.nongdambackend.restaurant.api.dto.response;
 
 import lombok.Builder;
 import shop.nongdam.nongdambackend.restaurant.domain.Restaurant;
-import shop.nongdam.nongdambackend.restaurant.menu.api.dto.response.MenuInfoResponseDTOs;
 
 @Builder
 public record RestaurantInfoResponseDTO(
@@ -16,8 +15,7 @@ public record RestaurantInfoResponseDTO(
         double longitude,
         String openTime,
         String closeTime,
-        String restaurantImage,
-        MenuInfoResponseDTOs menuInfoResponseDTOs
+        String restaurantImage
 ) {
 
     public static RestaurantInfoResponseDTO from(Restaurant restaurant) {
@@ -33,7 +31,6 @@ public record RestaurantInfoResponseDTO(
                 .openTime(restaurant.getOpenTime())
                 .closeTime(restaurant.getCloseTime())
                 .restaurantImage(restaurant.getRestaurantImage())
-                .menuInfoResponseDTOs(MenuInfoResponseDTOs.from(restaurant.getMenu()))
                 .build();
     }
 }
