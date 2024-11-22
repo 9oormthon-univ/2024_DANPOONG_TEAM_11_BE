@@ -17,7 +17,8 @@ import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantDetailSa
 import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTO;
-import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTOs;
+import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantTagResponseDTO;
+import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantTagResponseDTOs;
 import shop.nongdam.nongdambackend.restaurant.domain.Restaurant;
 import shop.nongdam.nongdambackend.restaurant.domain.repository.RestaurantRepository;
 import shop.nongdam.nongdambackend.restaurant.exception.AccessDeniedRestaurantException;
@@ -64,14 +65,14 @@ public class RestaurantService {
         return RestaurantDetailInfoResponseDTO.from(restaurant);
     }
 
-    public RestaurantInfoResponseDTOs findAll(Pageable pageable) {
-        Page<Restaurant> restaurants = restaurantRepository.findAllRestaurants(pageable);
+    public RestaurantTagResponseDTOs findAll(Pageable pageable) {
+        Page<Restaurant> restaurants = restaurantRepository.findRegisteredRestaurants(pageable);
 
-        List<RestaurantInfoResponseDTO> restaurantInfoResponseDTOs = restaurants.stream()
-                .map(RestaurantInfoResponseDTO::from)
+        List<RestaurantTagResponseDTO> restaurantTagResponseDTOs = restaurants.stream()
+                .map(RestaurantTagResponseDTO::from)
                 .toList();
 
-        return RestaurantInfoResponseDTOs.of(restaurantInfoResponseDTOs, PageInfoResDto.from(restaurants));
+        return RestaurantTagResponseDTOs.of(restaurantTagResponseDTOs, PageInfoResDto.from(restaurants));
     }
 
     @Transactional
@@ -114,7 +115,8 @@ public class RestaurantService {
                 imageService.saveImage(restaurantImage),
                 restaurantDetailSaveRequestDTO.openTime(),
                 restaurantDetailSaveRequestDTO.closeTime(),
-                restaurantDetailSaveRequestDTO.precautions());
+                restaurantDetailSaveRequestDTO.precautions(),
+                true);
     }
 
     private Restaurant buildNewRestaurant(RestaurantSaveRequestDTO restaurantSaveRequestDTO, Member member) {

@@ -57,6 +57,8 @@ public class Restaurant extends BaseEntity {
 
     private String precautions;
 
+    private boolean isRegistered = false;
+
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menu = new ArrayList<>();
 
@@ -67,8 +69,9 @@ public class Restaurant extends BaseEntity {
     @Builder
     public Restaurant(String restaurantName, String restaurantRepresentative, Member member, String phoneNumber,
                       String businessRegistrationNumber, String address, double latitude, double longitude,
-                      String restaurantImage, String openTime, String closeTime, String precautions, List<Menu> menu,
-                      Region region) {
+                      String restaurantImage, String openTime, String closeTime, String precautions,
+                      boolean isRegistered,
+                      List<Menu> menu, Region region) {
         this.restaurantName = restaurantName;
         this.restaurantRepresentative = restaurantRepresentative;
         this.member = member;
@@ -81,22 +84,30 @@ public class Restaurant extends BaseEntity {
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.precautions = precautions;
+        this.isRegistered = isRegistered;
         this.menu = menu;
         this.region = region;
     }
 
     public void updateDetail(double latitude, double longitude, String restaurantImage, String openTime,
-                             String closeTime, String precautions) {
+                             String closeTime, String precautions, boolean isRegistered) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.restaurantImage = restaurantImage;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.precautions = precautions;
-
+        this.isRegistered = isRegistered;
     }
 
     public boolean isOwner(Member member) {
         return this.member.equals(member);
+    }
+
+    public Menu getMainMenu() {
+        return this.menu.stream()
+                .filter(Menu::isMainMenu)
+                .findFirst()
+                .orElse(null);
     }
 }

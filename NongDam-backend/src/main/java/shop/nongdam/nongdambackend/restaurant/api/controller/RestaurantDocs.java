@@ -14,6 +14,7 @@ import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequ
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTOs;
+import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantTagResponseDTOs;
 
 
 @Tag(name = "[식당 API]", description = "식당 관련 API")
@@ -65,7 +66,7 @@ public interface RestaurantDocs {
                             content = @Content(schema = @Schema(implementation = RestaurantInfoResponseDTOs.class))),
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             })
-    ApiResponseTemplate<RestaurantInfoResponseDTOs> findAll(
+    ApiResponseTemplate<RestaurantTagResponseDTOs> findAll(
             @Parameter(description = "페이지 번호", required = false, example = "0") int page,
             @Parameter(description = "페이지 크기", required = false, example = "10") int size);
 

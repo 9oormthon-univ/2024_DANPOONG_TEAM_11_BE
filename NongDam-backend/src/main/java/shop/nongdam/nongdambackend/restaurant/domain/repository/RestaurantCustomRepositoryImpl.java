@@ -37,4 +37,25 @@ public class RestaurantCustomRepositoryImpl implements RestaurantCustomRepositor
 
         return new PageImpl<>(restaurants, pageable, total);
     }
+
+    @Override
+    public Page<Restaurant> findRegisteredRestaurants(Pageable pageable) {
+        long total = Optional.ofNullable(
+                queryFactory
+                        .select(restaurant.count())
+                        .from(restaurant)
+                        .where(restaurant.isRegistered.eq(true))
+                        .fetchOne()
+        ).orElse(0L);
+
+        List<Restaurant> registeredRestaurants = queryFactory
+                .selectFrom(restaurant)
+                .where(restaurant.isRegistered.eq(true))
+                .orderBy(restaurant.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(registeredRestaurants, pageable, total);
+    }
 }
