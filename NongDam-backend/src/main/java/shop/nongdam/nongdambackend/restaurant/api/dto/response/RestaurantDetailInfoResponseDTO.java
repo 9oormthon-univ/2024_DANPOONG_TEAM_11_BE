@@ -13,6 +13,8 @@ public record RestaurantDetailInfoResponseDTO(
         Double latitude,
         Double longitude,
         String precautions,
+        String openTime,
+        String closeTime,
         MenuInfoResponseDTOs menuInfoResponseDTOs
 ) {
     public static RestaurantDetailInfoResponseDTO from(Restaurant restaurant) {
@@ -26,7 +28,9 @@ public record RestaurantDetailInfoResponseDTO(
                 restaurant.getLatitude(),
                 restaurant.getLongitude(),
                 restaurant.getPrecautions(),
-                MenuInfoResponseDTOs.from(restaurant.getMenu())
+                restaurant.getOpenTime(),
+                restaurant.getCloseTime(),
+                shop.nongdam.nongdambackend.restaurant.menu.api.dto.response.MenuInfoResponseDTOs.from(restaurant.getMenu())
         );
     }
 }

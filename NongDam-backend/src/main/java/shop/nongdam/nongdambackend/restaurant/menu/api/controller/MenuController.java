@@ -25,8 +25,9 @@ public class MenuController implements MenuDocs {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponseTemplate<MenuInfoResponseDTO> save(@CurrentMemberEmail String email,
                                                          @Valid @RequestPart MenuSaveRequestDTO menuSaveRequestDTO,
-                                                         @RequestPart(required = false) MultipartFile menuImage) {
+                                                         @RequestPart(required = false) MultipartFile menuImage,
+                                                         @RequestPart(required = false) MultipartFile farmProduceImage) {
 
-        return ApiResponseTemplate.created("메뉴 저장 성공", menuService.save(email, menuSaveRequestDTO, menuImage));
+        return ApiResponseTemplate.created("메뉴 저장 성공", menuService.save(email, menuSaveRequestDTO, menuImage, farmProduceImage));
     }
 }
