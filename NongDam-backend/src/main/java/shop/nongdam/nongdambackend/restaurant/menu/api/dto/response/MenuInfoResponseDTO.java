@@ -20,6 +20,7 @@ public record MenuInfoResponseDTO(
                 .name(menu.getName())
                 .price(menu.getPrice())
                 .image(menu.getImage())
+                .farmProduce(menu.getFarmProduce())
                 .mainDescription(menu.getMainDescription())
                 .subDescription(menu.getSubDescription())
                 .isMainMenu(menu.isMainMenu())
