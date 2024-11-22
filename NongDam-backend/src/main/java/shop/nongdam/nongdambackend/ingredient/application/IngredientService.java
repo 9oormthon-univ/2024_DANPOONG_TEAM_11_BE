@@ -5,13 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import shop.nongdam.nongdambackend.auth.exception.EmailNotFoundException;
-import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTO;
-import shop.nongdam.nongdambackend.farm.api.dto.response.FarmInfoResponseDTOs;
 import shop.nongdam.nongdambackend.farm.domain.Farm;
 import shop.nongdam.nongdambackend.farm.domain.repository.FarmRepository;
 import shop.nongdam.nongdambackend.farm.exception.FarmAccessDeniedException;
 import shop.nongdam.nongdambackend.farm.exception.FarmNotFoundException;
+import shop.nongdam.nongdambackend.global.aws.application.ImageService;
 import shop.nongdam.nongdambackend.global.dto.PageInfoResDto;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
@@ -35,6 +35,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class IngredientService {
+    private final ImageService imageService;
+
     private final IngredientRepository ingredientRepository;
     private final MemberRepository memberRepository;
     private final FarmRepository farmRepository;
@@ -46,7 +48,8 @@ public class IngredientService {
     public IngredientInfoResponseDTO saveIngredientInfo(
             String email,
             Long farmId,
-            IngredientSaveRequestDTO ingredientSaveRequestDto
+            IngredientSaveRequestDTO ingredientSaveRequestDto,
+            List<MultipartFile> ingredientImages
     ) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(EmailNotFoundException::new);
@@ -58,6 +61,15 @@ public class IngredientService {
 
         Ingredient ingredient = buildNewIngredient(farm, ingredientSaveRequestDto);
         farm.addIngredient(ingredient);
+        ingredientImages.forEach(ingredientImage -> {
+            String imageUrl = imageService.saveImage(ingredientImage);
+            IngredientImage newIngredientImage = IngredientImage.builder()
+                    .imageUrl(imageUrl)
+                    .ingredient(ingredient)
+                    .build();
+            ingredient.addIngredientImage(newIngredientImage);
+        });
+
         ingredientRepository.save(ingredient);
 
         return IngredientInfoResponseDTO.from(ingredient);

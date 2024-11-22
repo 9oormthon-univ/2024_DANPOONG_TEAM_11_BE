@@ -2,13 +2,17 @@ package shop.nongdam.nongdambackend.ingredient.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTOs;
 import shop.nongdam.nongdambackend.ingredient.application.IngredientService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,14 +21,19 @@ public class IngredientController implements IngredientDocs{
     public final IngredientService ingredientService;
 
     @Override
-    @PostMapping("{farmId}")
+    @PostMapping(
+            value = "/{farmId}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ApiResponseTemplate<IngredientInfoResponseDTO> save(
             @PathVariable Long farmId,
             @CurrentMemberEmail String email,
-            @RequestBody IngredientSaveRequestDTO ingredientSaveRequestDto
+            @RequestPart IngredientSaveRequestDTO ingredientSaveRequestDto,
+            @RequestPart(required = false) List<MultipartFile> ingredientImages
     ){
         IngredientInfoResponseDTO ingredientInfoResponseDTO = ingredientService
-                .saveIngredientInfo(email, farmId, ingredientSaveRequestDto);
+                .saveIngredientInfo(email, farmId, ingredientSaveRequestDto, ingredientImages);
 
         return ApiResponseTemplate.created("식료품 등록 성공", ingredientInfoResponseDTO);
     }
