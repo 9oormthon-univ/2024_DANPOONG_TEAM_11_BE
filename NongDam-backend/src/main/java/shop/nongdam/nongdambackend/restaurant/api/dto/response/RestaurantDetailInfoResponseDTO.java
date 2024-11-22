@@ -12,6 +12,7 @@ public record RestaurantDetailInfoResponseDTO(
         String address,
         Double latitude,
         Double longitude,
+        String precautions,
         MenuInfoResponseDTOs menuInfoResponseDTOs
 ) {
     public static RestaurantDetailInfoResponseDTO from(Restaurant restaurant) {
@@ -24,6 +25,7 @@ public record RestaurantDetailInfoResponseDTO(
                 restaurant.getAddress(),
                 restaurant.getLatitude(),
                 restaurant.getLongitude(),
+                restaurant.getPrecautions(),
                 MenuInfoResponseDTOs.from(restaurant.getMenu())
         );
     }

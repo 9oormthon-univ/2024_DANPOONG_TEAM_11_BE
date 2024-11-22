@@ -113,7 +113,8 @@ public class RestaurantService {
                 restaurantDetailSaveRequestDTO.longitude(),
                 imageService.saveImage(restaurantImage),
                 restaurantDetailSaveRequestDTO.openTime(),
-                restaurantDetailSaveRequestDTO.closeTime());
+                restaurantDetailSaveRequestDTO.closeTime(),
+                restaurantDetailSaveRequestDTO.precautions());
     }
 
     private Restaurant buildNewRestaurant(RestaurantSaveRequestDTO restaurantSaveRequestDTO, Member member) {

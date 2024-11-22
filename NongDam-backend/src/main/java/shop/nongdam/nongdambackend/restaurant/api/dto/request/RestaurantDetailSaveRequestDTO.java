@@ -17,6 +17,9 @@ public record RestaurantDetailSaveRequestDTO(
         String openTime,
 
         @NotBlank(message = "마감 시간은 필수 입력값입니다.")
-        String closeTime
+        String closeTime,
+
+        @NotBlank(message = "주의 사항은 필수 입력값입니다.")
+        String precautions
 ) {
 }
