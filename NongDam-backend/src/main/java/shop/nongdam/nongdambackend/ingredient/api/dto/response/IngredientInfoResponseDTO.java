@@ -11,6 +11,7 @@ import java.util.List;
 public record IngredientInfoResponseDTO(
         Long ingredientId,
         String ingredientName,
+        String ingredientCategory,
         FarmSummaryResponseDTO farmSummaryResponseDTO,
         String uglyReason,
         String ingredientDescription,
@@ -20,6 +21,7 @@ public record IngredientInfoResponseDTO(
         return IngredientInfoResponseDTO.builder()
                 .ingredientId(ingredient.getId())
                 .ingredientName(ingredient.getIngredientName())
+                .ingredientCategory(ingredient.getIngredientCategory().getName())
                 .farmSummaryResponseDTO(FarmSummaryResponseDTO.from(ingredient.getFarm()))
                 .uglyReason(ingredient.getIngredientUglyReason().getName())
                 .ingredientDescription(ingredient.getIngredientDescription())
