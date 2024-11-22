@@ -8,14 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
-import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.menu.api.dto.request.MenuSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.menu.api.dto.response.MenuInfoResponseDTO;
 
 public interface MenuDocs {
 
-    @Operation(summary = "식당 등록", description = "새로운 식당 정보를 등록합니다.",
+    @Operation(summary = "식당 메뉴 등록", description = "새로운 식당 메뉴를 등록합니다.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "식당 등록 성공",
                             content = @Content(schema = @Schema(implementation = RestaurantInfoResponseDTO.class))),

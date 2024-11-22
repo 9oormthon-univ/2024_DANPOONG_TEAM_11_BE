@@ -42,9 +42,9 @@ public class Restaurant extends BaseEntity {
     @Column(name = "address", nullable = false)
     private String address;
 
-    private Double latitude;
+    private double latitude;
 
-    private Double longitude;
+    private double longitude;
 
     @Column(name = "represent_image")
     private String restaurantImage;
@@ -64,7 +64,7 @@ public class Restaurant extends BaseEntity {
 
     @Builder
     public Restaurant(String restaurantName, String restaurantRepresentative, Member member, String phoneNumber,
-                      String businessRegistrationNumber, String address, Double latitude, Double longitude,
+                      String businessRegistrationNumber, String address, double latitude, double longitude,
                       String restaurantImage, String openTime, String closeTime, List<Menu> menu, Region region) {
         this.restaurantName = restaurantName;
         this.restaurantRepresentative = restaurantRepresentative;
