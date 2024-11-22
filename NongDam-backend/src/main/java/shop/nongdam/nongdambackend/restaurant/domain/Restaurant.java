@@ -55,6 +55,8 @@ public class Restaurant extends BaseEntity {
     @Column(name = "close_time")
     private String closeTime;
 
+    private String precautions;
+
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menu = new ArrayList<>();
 
@@ -65,7 +67,8 @@ public class Restaurant extends BaseEntity {
     @Builder
     public Restaurant(String restaurantName, String restaurantRepresentative, Member member, String phoneNumber,
                       String businessRegistrationNumber, String address, double latitude, double longitude,
-                      String restaurantImage, String openTime, String closeTime, List<Menu> menu, Region region) {
+                      String restaurantImage, String openTime, String closeTime, String precautions, List<Menu> menu,
+                      Region region) {
         this.restaurantName = restaurantName;
         this.restaurantRepresentative = restaurantRepresentative;
         this.member = member;
@@ -77,37 +80,19 @@ public class Restaurant extends BaseEntity {
         this.restaurantImage = restaurantImage;
         this.openTime = openTime;
         this.closeTime = closeTime;
-        this.menu = menu;
-        this.region = region;
-    }
-
-    public void updateAllFields(String restaurantName, String restaurantRepresentative, Member member,
-                                String phoneNumber,
-                                String businessRegistrationNumber, String address, double latitude, double longitude,
-                                String representImage, String openTime, String closeTime, List<Menu> menu,
-                                Region region) {
-        this.restaurantName = restaurantName;
-        this.restaurantRepresentative = restaurantRepresentative;
-        this.member = member;
-        this.phoneNumber = phoneNumber;
-        this.businessRegistrationNumber = businessRegistrationNumber;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.restaurantImage = representImage;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
+        this.precautions = precautions;
         this.menu = menu;
         this.region = region;
     }
 
     public void updateDetail(double latitude, double longitude, String restaurantImage, String openTime,
-                             String closeTime) {
+                             String closeTime, String precautions) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.restaurantImage = restaurantImage;
         this.openTime = openTime;
         this.closeTime = closeTime;
+        this.precautions = precautions;
 
     }
 
