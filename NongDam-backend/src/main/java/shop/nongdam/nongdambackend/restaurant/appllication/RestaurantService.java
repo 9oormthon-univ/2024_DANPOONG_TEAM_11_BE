@@ -59,9 +59,9 @@ public class RestaurantService {
         return RestaurantDetailInfoResponseDTO.from(restaurant);
     }
 
-    public RestaurantInfoResponseDTO findById(Long restaurantId) {
+    public RestaurantDetailInfoResponseDTO findById(Long restaurantId) {
         Restaurant restaurant = getRestaurantById(restaurantId);
-        return RestaurantInfoResponseDTO.from(restaurant);
+        return RestaurantDetailInfoResponseDTO.from(restaurant);
     }
 
     public RestaurantInfoResponseDTOs findAll(Pageable pageable) {
