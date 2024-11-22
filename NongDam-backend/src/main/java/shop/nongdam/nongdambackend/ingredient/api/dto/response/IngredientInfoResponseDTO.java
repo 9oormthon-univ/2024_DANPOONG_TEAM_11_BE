@@ -12,6 +12,7 @@ public record IngredientInfoResponseDTO(
         Long ingredientId,
         String ingredientName,
         String ingredientCategory,
+        Long price,
         FarmSummaryResponseDTO farmSummaryResponseDTO,
         String uglyReason,
         String ingredientDescription,
@@ -22,6 +23,7 @@ public record IngredientInfoResponseDTO(
                 .ingredientId(ingredient.getId())
                 .ingredientName(ingredient.getIngredientName())
                 .ingredientCategory(ingredient.getIngredientCategory().getName())
+                .price(ingredient.getPrice())
                 .farmSummaryResponseDTO(FarmSummaryResponseDTO.from(ingredient.getFarm()))
                 .uglyReason(ingredient.getIngredientUglyReason().getName())
                 .ingredientDescription(ingredient.getIngredientDescription())
