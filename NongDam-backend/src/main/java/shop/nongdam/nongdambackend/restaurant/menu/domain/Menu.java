@@ -24,6 +24,8 @@ public class Menu extends BaseEntity {
 
     private String farmProduce;
 
+    private String farmProduceImage;
+
     private String mainDescription;
 
     private String subDescription;
@@ -35,12 +37,14 @@ public class Menu extends BaseEntity {
     private Restaurant restaurant;
 
     @Builder
-    public Menu(String name, int price, String image, String farmProduce, String mainDescription, String subDescription,
-                boolean isMainMenu, Restaurant restaurant) {
+    public Menu(String name, int price, String image, String farmProduce, String farmProduceImage,
+                String mainDescription,
+                String subDescription, boolean isMainMenu, Restaurant restaurant) {
         this.name = name;
         this.price = price;
         this.image = image;
         this.farmProduce = farmProduce;
+        this.farmProduceImage = farmProduceImage;
         this.mainDescription = mainDescription;
         this.subDescription = subDescription;
         this.isMainMenu = isMainMenu;

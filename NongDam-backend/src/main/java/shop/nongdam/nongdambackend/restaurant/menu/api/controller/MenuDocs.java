@@ -27,6 +27,6 @@ public interface MenuDocs {
             @Parameter(description = "메뉴 저장 요청 데이터", required = true,
                     schema = @Schema(implementation = MenuSaveRequestDTO.class))
             MenuSaveRequestDTO menuSaveRequestDTO,
-            @RequestPart(value = "menuImage", required = false) MultipartFile multipartFile);
-
+            @RequestPart(value = "menuImage", required = false) MultipartFile multipartFile,
+            @RequestPart(value = "farmProduceImage", required = false) MultipartFile farmProduceImage);
 }
