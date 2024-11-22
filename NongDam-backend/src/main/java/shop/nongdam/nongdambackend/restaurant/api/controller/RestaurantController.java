@@ -51,7 +51,7 @@ public class RestaurantController implements RestaurantDocs {
 
     @Override
     @GetMapping("/{restaurantId}")
-    public ApiResponseTemplate<RestaurantInfoResponseDTO> findById(@PathVariable Long restaurantId) {
+    public ApiResponseTemplate<RestaurantDetailInfoResponseDTO> findById(@PathVariable Long restaurantId) {
         return ApiResponseTemplate.ok("식당 상세 조회 성공", restaurantService.findById(restaurantId));
     }
 

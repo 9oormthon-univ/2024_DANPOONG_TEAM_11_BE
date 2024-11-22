@@ -7,15 +7,16 @@ import shop.nongdam.nongdambackend.restaurant.menu.domain.Menu;
 
 @Builder
 public record MenuInfoResponseDTOs(
-        List<MenuInfoResponseDTO> menuInfoResponseDTOS
+        List<MenuInfoResponseDTO> menuInfoResponseDTOs
 ) {
     public static MenuInfoResponseDTOs from(List<Menu> menu) {
-        return new MenuInfoResponseDTOs(
-                menu.stream()
-                        .filter(Objects::nonNull)
-                        .map(MenuInfoResponseDTO::from)
-                        .toList()
-
-        );
+        return MenuInfoResponseDTOs.builder()
+                .menuInfoResponseDTOs(
+                        menu == null ? null : menu.stream()
+                                .filter(Objects::nonNull)
+                                .map(MenuInfoResponseDTO::from)
+                                .toList()
+                )
+                .build();
     }
 }
