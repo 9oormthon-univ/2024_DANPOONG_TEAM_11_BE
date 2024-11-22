@@ -1,16 +1,17 @@
 package shop.nongdam.nongdambackend.restaurant.api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record RestaurantDetailSaveRequestDTO(
-        @NotBlank(message = "식당 이름은 필수 입력값입니다.")
+        @NotNull(message = "식당 id는 필수 입력값입니다.")
         Long restaurantId,
 
-        @NotBlank(message = "위도는 필수 입력값입니다.")
-        double latitude,
+        @NotNull(message = "위도는 필수 입력값입니다.")
+        Double latitude,
 
-        @NotBlank(message = "경도 필수 입력값입니다.")
-        double longitude,
+        @NotNull(message = "경도는 필수 입력값입니다.")
+        Double longitude,
 
         @NotBlank(message = "오픈 시간은 필수 입력값입니다.")
         String openTime,

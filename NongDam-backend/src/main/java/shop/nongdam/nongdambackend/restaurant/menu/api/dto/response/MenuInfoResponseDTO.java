@@ -8,6 +8,7 @@ public record MenuInfoResponseDTO(
         Long id,
         String name,
         int price,
+        String farmProduce,
         String image,
         String mainDescription,
         String subDescription,
