@@ -11,8 +11,8 @@ public record RestaurantInfoResponseDTO(
         String phoneNumber,
         String businessRegistrationNumber,
         String address,
-        double latitude,
-        double longitude,
+        Double latitude,
+        Double longitude,
         String openTime,
         String closeTime,
         String restaurantImage

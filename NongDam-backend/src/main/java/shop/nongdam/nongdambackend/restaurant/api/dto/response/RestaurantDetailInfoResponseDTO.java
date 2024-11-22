@@ -10,8 +10,8 @@ public record RestaurantDetailInfoResponseDTO(
         String phoneNumber,
         String businessRegistrationNumber,
         String address,
-        double latitude,
-        double longitude,
+        Double latitude,
+        Double longitude,
         MenuInfoResponseDTOs menuInfoResponseDTOs
 ) {
     public static RestaurantDetailInfoResponseDTO from(Restaurant restaurant) {

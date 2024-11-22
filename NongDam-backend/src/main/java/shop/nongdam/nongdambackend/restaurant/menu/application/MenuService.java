@@ -64,6 +64,7 @@ public class MenuService {
                 .name(menuSaveRequestDTO.name())
                 .price(menuSaveRequestDTO.price())
                 .image(menuImageUrl)
+                .farmProduce(menuSaveRequestDTO.farmProduce())
                 .mainDescription(menuSaveRequestDTO.mainDescription())
                 .subDescription(menuSaveRequestDTO.subDescription())
                 .isMainMenu(menuSaveRequestDTO.isMainMenu())
