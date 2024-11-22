@@ -21,7 +21,7 @@ import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantDetailSa
 import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTO;
-import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTOs;
+import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantTagResponseDTOs;
 import shop.nongdam.nongdambackend.restaurant.appllication.RestaurantService;
 
 @RestController
@@ -51,13 +51,13 @@ public class RestaurantController implements RestaurantDocs {
 
     @Override
     @GetMapping("/{restaurantId}")
-    public ApiResponseTemplate<RestaurantInfoResponseDTO> findById(@PathVariable Long restaurantId) {
+    public ApiResponseTemplate<RestaurantDetailInfoResponseDTO> findById(@PathVariable Long restaurantId) {
         return ApiResponseTemplate.ok("식당 상세 조회 성공", restaurantService.findById(restaurantId));
     }
 
     @Override
     @GetMapping
-    public ApiResponseTemplate<RestaurantInfoResponseDTOs> findAll(
+    public ApiResponseTemplate<RestaurantTagResponseDTOs> findAll(
             @RequestParam(defaultValue = "0", name = "page") int page,
             @RequestParam(defaultValue = "10", name = "size") int size) {
         return ApiResponseTemplate.ok("식당 전체 조회 성공", restaurantService.findAll(PageRequest.of(page, size)));

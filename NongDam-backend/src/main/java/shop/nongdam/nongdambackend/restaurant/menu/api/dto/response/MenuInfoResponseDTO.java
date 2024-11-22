@@ -8,8 +8,9 @@ public record MenuInfoResponseDTO(
         Long id,
         String name,
         int price,
+        String menuImage,
         String farmProduce,
-        String image,
+        String farmProduceImage,
         String mainDescription,
         String subDescription,
         boolean isMainMenu
@@ -19,8 +20,9 @@ public record MenuInfoResponseDTO(
                 .id(menu.getId())
                 .name(menu.getName())
                 .price(menu.getPrice())
-                .image(menu.getImage())
+                .menuImage(menu.getImage())
                 .farmProduce(menu.getFarmProduce())
+                .farmProduceImage(menu.getFarmProduceImage())
                 .mainDescription(menu.getMainDescription())
                 .subDescription(menu.getSubDescription())
                 .isMainMenu(menu.isMainMenu())

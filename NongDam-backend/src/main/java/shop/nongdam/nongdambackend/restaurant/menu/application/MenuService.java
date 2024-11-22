@@ -27,13 +27,15 @@ public class MenuService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MenuInfoResponseDTO save(String email, MenuSaveRequestDTO menuSaveRequestDTO, MultipartFile menuImage) {
+    public MenuInfoResponseDTO save(String email, MenuSaveRequestDTO menuSaveRequestDTO, MultipartFile menuImage,
+                                    MultipartFile farmProduceImage) {
         Member member = getMemberByEmail(email);
         Restaurant restaurant = getRestaurantById(menuSaveRequestDTO.restaurantId());
         validateRestaurantOwnership(member, restaurant);
 
         String menuImageUrl = saveMenuImage(menuImage);
-        Menu menu = createNewMenu(menuSaveRequestDTO, menuImageUrl, restaurant);
+        String farmProduceImageUrl = saveMenuImage(farmProduceImage);
+        Menu menu = createNewMenu(menuSaveRequestDTO, menuImageUrl, farmProduceImageUrl, restaurant);
         menuRepository.save(menu);
 
         return MenuInfoResponseDTO.from(menu);
@@ -59,12 +61,14 @@ public class MenuService {
         return imageService.saveImage(menuImage);
     }
 
-    private Menu createNewMenu(MenuSaveRequestDTO menuSaveRequestDTO, String menuImageUrl, Restaurant restaurant) {
+    private Menu createNewMenu(MenuSaveRequestDTO menuSaveRequestDTO, String menuImageUrl, String farmProduceImageUrl,
+                               Restaurant restaurant) {
         return Menu.builder()
                 .name(menuSaveRequestDTO.name())
                 .price(menuSaveRequestDTO.price())
                 .image(menuImageUrl)
                 .farmProduce(menuSaveRequestDTO.farmProduce())
+                .farmProduceImage(farmProduceImageUrl)
                 .mainDescription(menuSaveRequestDTO.mainDescription())
                 .subDescription(menuSaveRequestDTO.subDescription())
                 .isMainMenu(menuSaveRequestDTO.isMainMenu())

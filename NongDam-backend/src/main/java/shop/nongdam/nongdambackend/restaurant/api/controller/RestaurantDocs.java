@@ -2,13 +2,10 @@ package shop.nongdam.nongdambackend.restaurant.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
@@ -17,7 +14,7 @@ import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequ
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantDetailInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantInfoResponseDTOs;
-import shop.nongdam.nongdambackend.restaurant.menu.api.dto.request.MenuSaveRequestDTO;
+import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantTagResponseDTOs;
 
 
 @Tag(name = "[식당 API]", description = "식당 관련 API")
@@ -60,7 +57,7 @@ public interface RestaurantDocs {
                     @ApiResponse(responseCode = "404", description = "식당을 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             })
-    ApiResponseTemplate<RestaurantInfoResponseDTO> findById(
+    ApiResponseTemplate<RestaurantDetailInfoResponseDTO> findById(
             @Parameter(description = "식당 ID", required = true) Long restaurantId);
 
     @Operation(summary = "식당 전체 조회", description = "모든 식당 정보를 페이징하여 조회합니다.",
@@ -69,7 +66,7 @@ public interface RestaurantDocs {
                             content = @Content(schema = @Schema(implementation = RestaurantInfoResponseDTOs.class))),
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             })
-    ApiResponseTemplate<RestaurantInfoResponseDTOs> findAll(
+    ApiResponseTemplate<RestaurantTagResponseDTOs> findAll(
             @Parameter(description = "페이지 번호", required = false, example = "0") int page,
             @Parameter(description = "페이지 크기", required = false, example = "10") int size);
 
