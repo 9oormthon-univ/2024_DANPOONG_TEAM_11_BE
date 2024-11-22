@@ -27,7 +27,8 @@ public class Ingredient extends BaseEntity {
     @Column(name = "ingredient_description", nullable = false)
     private String ingredientDescription;
 
-    //todo: 이미지 파일 여러개
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<IngredientImage> ingredientImages = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_category_id", nullable = false)
@@ -44,7 +45,9 @@ public class Ingredient extends BaseEntity {
         this.ingredientDescription = ingredientDescription;
         this.ingredientCategory = ingredientCategory;
         this.price = price;
-
     }
 
+    public void addIngredientImage(IngredientImage newIngredientImage) {
+        this.ingredientImages.add(newIngredientImage);
+    }
 }

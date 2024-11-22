@@ -6,10 +6,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.multipart.MultipartFile;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTOs;
+
+import java.util.List;
 
 @Tag(name = "[식료품 API]", description = "식료품 관련 API")
 public interface IngredientDocs {
@@ -27,7 +30,8 @@ public interface IngredientDocs {
     ApiResponseTemplate<IngredientInfoResponseDTO> save(
             @Parameter(description = "농산물 판매자(농가) ID", required = true) Long farmId,
             @Parameter(hidden = true) String email,
-            @Parameter(description = "식료품 정보", required = true) IngredientSaveRequestDTO ingredientSaveRequestDto
+            @Parameter(description = "식료품 정보", required = true) IngredientSaveRequestDTO ingredientSaveRequestDto,
+            @Parameter(description = "식료품 이미지", required = true) List<MultipartFile> ingredientImages
     );
 
     @Operation(summary = "식료품 상세 조회", description = "식료품 ID로 식료품 상세 정보를 조회합니다.",
