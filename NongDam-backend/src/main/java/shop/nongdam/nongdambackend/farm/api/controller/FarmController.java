@@ -46,7 +46,7 @@ public class FarmController implements FarmDocs{
     }
 
     @Override
-    @GetMapping("{farmId}/badges/{badgeName}")
+    @PostMapping("{farmId}/badges/{badgeName}")
     public ApiResponseTemplate<FarmDetailInfoResponseDTO> giveBadge(
             @PathVariable Long farmId,
             @PathVariable String badgeName
