@@ -120,7 +120,6 @@ public class FarmService {
         return Farm.builder()
                 .member(member)
                 .farmName(farmSaveRequestDTO.farmName())
-                .profileImage(farmSaveRequestDTO.profileImage())
                 .farmRepresentative(farmSaveRequestDTO.farmRepresentative())
                 .phoneNumber(farmSaveRequestDTO.phoneNumber())
                 .businessRegistrationNumber(farmSaveRequestDTO.businessRegistrationNumber())
