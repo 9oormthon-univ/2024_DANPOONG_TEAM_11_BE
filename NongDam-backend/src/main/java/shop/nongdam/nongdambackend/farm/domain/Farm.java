@@ -31,7 +31,7 @@ public class Farm extends BaseEntity  {
     private String phoneNumber;
 
     @Column(name = "business_registration_number", nullable = false)
-    private Long businessRegistrationNumber;
+    private String businessRegistrationNumber;
 
     @Column(nullable = false)
     private String address;
@@ -58,7 +58,7 @@ public class Farm extends BaseEntity  {
     @Builder
     public Farm(Member member, String farmName, String profileImage,
                 String farmRepresentative, String phoneNumber,
-                Long businessRegistrationNumber, String address,
+                String businessRegistrationNumber, String address,
                 Region region, Double latitude, Double longitude, List<Ingredient> ingredients) {
         this.member = member;
         this.farmName = farmName;
