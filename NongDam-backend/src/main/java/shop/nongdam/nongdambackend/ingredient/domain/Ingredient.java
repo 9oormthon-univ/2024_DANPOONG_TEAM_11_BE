@@ -36,6 +36,10 @@ public class Ingredient extends BaseEntity {
 
     private Long price;
 
+    @Setter
+    @Column(name = "gpt_comment", length = 2200)
+    private String gptComment;
+
     @Builder
     public Ingredient(Farm farm, String ingredientName, IngredientUglyReason ingredientUglyReason,
                       String ingredientDescription, IngredientCategory ingredientCategory, Long price) {
@@ -45,6 +49,7 @@ public class Ingredient extends BaseEntity {
         this.ingredientDescription = ingredientDescription;
         this.ingredientCategory = ingredientCategory;
         this.price = price;
+        this.gptComment = "";
     }
 
     public void addIngredientImage(IngredientImage newIngredientImage) {

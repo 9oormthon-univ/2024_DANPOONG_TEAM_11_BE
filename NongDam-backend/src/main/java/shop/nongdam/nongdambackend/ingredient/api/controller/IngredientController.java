@@ -2,6 +2,7 @@ package shop.nongdam.nongdambackend.ingredient.api.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import shop.nongdam.nongdambackend.global.annotation.AuthorizeRole;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
+import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientGptCommentDto;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTOs;
 import shop.nongdam.nongdambackend.ingredient.application.IngredientService;
@@ -24,6 +26,7 @@ import shop.nongdam.nongdambackend.member.domain.Role;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/ingredients")
+@Slf4j
 public class IngredientController implements IngredientDocs{
     public final IngredientService ingredientService;
 
@@ -63,5 +66,12 @@ public class IngredientController implements IngredientDocs{
     ){
         IngredientInfoResponseDTOs ingredientInfoResponseDTOs = ingredientService.findAll(category, region, PageRequest.of(page, size));
         return ApiResponseTemplate.ok("식료품 전체 조회 성공", ingredientInfoResponseDTOs);
+    }
+
+    @GetMapping("/{ingredientId}/gpt")
+    public ApiResponseTemplate<IngredientGptCommentDto> chatGpt(@PathVariable Long ingredientId){
+        log.info("GPT-4 채팅 요청");
+        IngredientGptCommentDto response = ingredientService.chatGpt(ingredientId);
+        return ApiResponseTemplate.ok("GPT-4 채팅 성공", response);
     }
 }

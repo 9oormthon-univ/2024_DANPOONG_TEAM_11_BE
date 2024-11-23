@@ -52,5 +52,9 @@ aws:
     image-path: ${S3_IMAGE_PATH}
     url-format: ${S3_URL_FORMAT}
 
+logging:
+  level:
+    root: info
+
 server:
   url: ${PROD_URL}
