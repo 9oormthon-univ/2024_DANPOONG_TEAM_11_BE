@@ -26,6 +26,11 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+  openai:
+    model: ${OPENAI_MODEL}
+    api-url: ${OPENAI_MODEL_API_URL}
+    secret: ${OPENAI_SECRET}
+
 jwt:
   secret: ${JWT_SECRET}
 token:
