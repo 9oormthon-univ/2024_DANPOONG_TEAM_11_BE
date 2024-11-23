@@ -12,8 +12,6 @@ public record FarmSaveRequestDTO(
         @NotBlank(message = "농가관련 사업자등록번호는 필수 입력값입니다.")
         Long businessRegistrationNumber,
         @NotBlank(message = "주소는 필수 입력값입니다.")
-        String address,
-        Double latitude,
-        Double longitude
+        String address
 ) {
 }
