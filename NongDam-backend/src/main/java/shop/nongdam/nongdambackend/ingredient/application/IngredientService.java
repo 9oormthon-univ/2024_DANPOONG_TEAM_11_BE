@@ -1,6 +1,7 @@
 package shop.nongdam.nongdambackend.ingredient.application;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import shop.nongdam.nongdambackend.farm.exception.FarmNotFoundException;
 import shop.nongdam.nongdambackend.global.aws.application.ImageService;
 import shop.nongdam.nongdambackend.global.dto.PageInfoResDto;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
+import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientGptCommentDto;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTOs;
 import shop.nongdam.nongdambackend.ingredient.domain.*;
@@ -25,6 +27,8 @@ import shop.nongdam.nongdambackend.ingredient.exception.IngredientNotFoundExcept
 import shop.nongdam.nongdambackend.ingredient.exception.IngredientUglyReasonNotFoundException;
 import shop.nongdam.nongdambackend.member.domain.Member;
 import shop.nongdam.nongdambackend.member.domain.repository.MemberRepository;
+import shop.nongdam.nongdambackend.openai.application.IngredientAnalysisScript;
+import shop.nongdam.nongdambackend.openai.application.OpenAiService;
 import shop.nongdam.nongdambackend.region.domain.Region;
 import shop.nongdam.nongdambackend.region.domain.repository.RegionRepository;
 import shop.nongdam.nongdambackend.region.exception.RegionNotFoundException;
@@ -34,8 +38,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class IngredientService {
     private final ImageService imageService;
+    private final OpenAiService openAiService;
 
     private final IngredientRepository ingredientRepository;
     private final MemberRepository memberRepository;
@@ -130,5 +136,28 @@ public class IngredientService {
                 .toList();
 
         return IngredientInfoResponseDTOs.of(ingredientInfoResponseDTOs, PageInfoResDto.from(ingredientsPage));
+    }
+
+    @Transactional
+    public IngredientGptCommentDto chatGpt(Long ingredientId) {
+        Ingredient ingredient = ingredientRepository.findById(ingredientId)
+                .orElseThrow(IngredientNotFoundException::new);
+
+        String gptComment = ingredient.getGptComment();
+
+        if (gptComment.isBlank()) {
+            String script = IngredientAnalysisScript
+                    .script(ingredient.getFarm().getRegion().getName(), ingredient.getIngredientName());
+
+            String newGptComment = openAiService.chat(script);
+            ingredient.setGptComment(newGptComment);
+
+            log.info(ingredient.getGptComment());
+
+            ingredientRepository.save(ingredient);
+            gptComment = newGptComment;
+        }
+
+        return IngredientGptCommentDto.from(gptComment);
     }
 }

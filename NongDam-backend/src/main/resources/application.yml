@@ -26,6 +26,11 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+  openai:
+    model: ${OPENAI_MODEL}
+    api-url: ${OPENAI_MODEL_API_URL}
+    secret: ${OPENAI_SECRET}
+
 jwt:
   secret: ${JWT_SECRET}
 token:
@@ -46,6 +51,10 @@ aws:
     bucket-name: ${S3_BUCKET_NAME}
     image-path: ${S3_IMAGE_PATH}
     url-format: ${S3_URL_FORMAT}
+
+logging:
+  level:
+    root: info
 
 server:
   url: ${PROD_URL}
