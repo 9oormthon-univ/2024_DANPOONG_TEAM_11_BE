@@ -8,7 +8,8 @@
 ![Group 13897](https://github.com/user-attachments/assets/72503089-72ce-463d-9690-2d29b8cb7ec1)
 
 ## 🔁 파이프라인
-![Group 13875](https://github.com/user-attachments/assets/6eabc2c4-0e1a-47cd-9ba5-15a24f62b627)
+![Group 13875 (2)](https://github.com/user-attachments/assets/17fb6660-526c-4d08-ae30-dc830a641a47)
+
 
 ## 📄 커밋 메시지 컨벤션
 
