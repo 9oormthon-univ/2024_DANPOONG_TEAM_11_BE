@@ -10,7 +10,7 @@ public record FarmSaveRequestDTO(
         @NotBlank(message = "농가 전화번호는 필수 입력값입니다.")
         String phoneNumber,
         @NotBlank(message = "농가관련 사업자등록번호는 필수 입력값입니다.")
-        Long businessRegistrationNumber,
+        String businessRegistrationNumber,
         @NotBlank(message = "주소는 필수 입력값입니다.")
         String address
 ) {
