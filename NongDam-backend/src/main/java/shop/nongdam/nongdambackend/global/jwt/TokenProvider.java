@@ -1,5 +1,6 @@
 package shop.nongdam.nongdambackend.global.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import shop.nongdam.nongdambackend.auth.api.dto.request.TokenRequestDTO;
 import shop.nongdam.nongdambackend.global.jwt.api.dto.TokenDTO;
+import shop.nongdam.nongdambackend.member.domain.Role;
 
 @Slf4j
 @Getter
@@ -75,8 +77,8 @@ public class TokenProvider {
         return false;
     }
 
-    public TokenDTO generateToken(String email) {
-        String accessToken = generateAccessToken(email);
+    public TokenDTO generateToken(String email, Role role) {
+        String accessToken = generateAccessToken(email, role);
         String refreshToken = generateRefreshToken();
 
         return TokenDTO.builder()
@@ -124,5 +126,34 @@ public class TokenProvider {
                     + Character.digit(secret.charAt(i + 1), 16));
         }
         return data;
+    }
+
+    public Role getMemberRoleFromToken(TokenRequestDTO tokenRequestDTO) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(tokenRequestDTO.authCode())
+                    .getBody();
+
+            String roleStr = claims.get("role", String.class);
+            return roleStr != null ? Role.valueOf(roleStr) : null;
+        } catch (Exception e) {
+            log.error("Failed to get role from token", e);
+            return null;
+        }
+    }
+
+    public String generateAccessToken(String email, Role role) {
+        Date date = new Date();
+        Date accessExpiryDate = new Date(date.getTime() + Long.parseLong(accessTokenExpireTime));
+
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("role", role.name())
+                .setIssuedAt(date)
+                .setExpiration(accessExpiryDate)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
     }
 }

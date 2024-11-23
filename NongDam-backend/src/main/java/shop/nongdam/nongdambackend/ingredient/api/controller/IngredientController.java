@@ -1,18 +1,25 @@
 package shop.nongdam.nongdambackend.ingredient.api.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import shop.nongdam.nongdambackend.global.annotation.AuthorizeRole;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
 import shop.nongdam.nongdambackend.ingredient.api.dto.request.IngredientSaveRequestDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTO;
 import shop.nongdam.nongdambackend.ingredient.api.dto.response.IngredientInfoResponseDTOs;
 import shop.nongdam.nongdambackend.ingredient.application.IngredientService;
-
-import java.util.List;
+import shop.nongdam.nongdambackend.member.domain.Role;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +33,7 @@ public class IngredientController implements IngredientDocs{
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @AuthorizeRole({Role.ROLE_ADMIN, Role.ROLE_PRODUCER})
     public ApiResponseTemplate<IngredientInfoResponseDTO> save(
             @PathVariable Long farmId,
             @CurrentMemberEmail String email,
