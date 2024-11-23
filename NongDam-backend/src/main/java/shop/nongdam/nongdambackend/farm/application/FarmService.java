@@ -125,8 +125,6 @@ public class FarmService {
                 .businessRegistrationNumber(farmSaveRequestDTO.businessRegistrationNumber())
                 .address(farmSaveRequestDTO.address())
                 .region(matchedRegion)
-                .latitude(farmSaveRequestDTO.latitude())
-                .longitude(farmSaveRequestDTO.longitude())
                 .build();
     }
 
