@@ -37,8 +37,8 @@
   </tr>
   <tr>
     <td>
-      <a href="https://github.com/wonjun0129">
-        <img src="https://github.com/MyungJiwoo.png" style="width:230px"/>
+      <a href="https://github.com/wonjun0120">
+        <img src="https://github.com/wonjun0120.png" style="width:230px"/>
       </a>
     </td>
     <td>
@@ -48,7 +48,7 @@
     </td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/wonjun0129">@wonjun0129</a></td>
+    <td align="center"><a href="https://github.com/wonjun0120">@wonjun0120</a></td>
     <td align="center"><a href="https://github.com/dongkyun0713">@dongkyun0713</a></td>
   </tr>
 </tbody>
