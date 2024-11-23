@@ -23,7 +23,8 @@ public class TokenService {
 
     @Transactional
     public TokenDTO getToken(MemberLoginResponseDTO memberLoginResponseDto) {
-        TokenDTO tokenDTO = tokenProvider.generateToken(memberLoginResponseDto.findMember().getEmail());
+        TokenDTO tokenDTO = tokenProvider.generateToken(memberLoginResponseDto.findMember().getEmail(),
+                memberLoginResponseDto.findMember().getRole());
 
         tokenSaveAndUpdate(memberLoginResponseDto, tokenDTO);
 

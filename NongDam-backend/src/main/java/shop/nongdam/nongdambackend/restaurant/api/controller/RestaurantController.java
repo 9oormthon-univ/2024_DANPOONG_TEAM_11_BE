@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import shop.nongdam.nongdambackend.global.annotation.AuthorizeRole;
 import shop.nongdam.nongdambackend.global.annotation.CurrentMemberEmail;
 import shop.nongdam.nongdambackend.global.template.ApiResponseTemplate;
+import shop.nongdam.nongdambackend.member.domain.Role;
 import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantDetailSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.request.RestaurantSaveRequestDTO;
 import shop.nongdam.nongdambackend.restaurant.api.dto.response.RestaurantDetailInfoResponseDTO;
@@ -41,6 +43,7 @@ public class RestaurantController implements RestaurantDocs {
     @PatchMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @AuthorizeRole({Role.ROLE_ADMIN, Role.ROLE_RESTAURANT})
     public ApiResponseTemplate<RestaurantDetailInfoResponseDTO> registerRestaurantDetail(
             @CurrentMemberEmail String email,
             @Valid @RequestPart RestaurantDetailSaveRequestDTO restaurantDetailSaveRequestDTO,
@@ -65,6 +68,7 @@ public class RestaurantController implements RestaurantDocs {
 
     @Override
     @DeleteMapping("/{restaurantId}")
+    @AuthorizeRole({Role.ROLE_ADMIN, Role.ROLE_RESTAURANT})
     public ApiResponseTemplate<Void> delete(@CurrentMemberEmail String email, @PathVariable Long restaurantId) {
         restaurantService.deleteById(email, restaurantId);
         return ApiResponseTemplate.ok("식당 삭제 성공");
