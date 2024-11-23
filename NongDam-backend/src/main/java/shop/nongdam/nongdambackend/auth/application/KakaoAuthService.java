@@ -103,6 +103,7 @@ public class KakaoAuthService implements AuthService {
     }
 
     private String extractPayload(String idToken) {
+        log.info("idToken: {}", idToken);
         return idToken.split(JWT_DELIMITER)[1];
     }
 
